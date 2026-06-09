@@ -36,11 +36,18 @@
             "imageWidth": 76
           }
         }
-      ]
+      ],
+      "expo-sqlite"
     ],
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "605adf39-5fd2-465a-ac31-c699bd497654"
+      }
     }
   }
 }
