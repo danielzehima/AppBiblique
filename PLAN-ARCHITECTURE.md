@@ -178,7 +178,7 @@ APPLI_BIBLIQUE/
 | **1 — Bible MVP** | Import Segond 1910 → SQLite, lecteur hors-ligne, réglages | Lire toute la Bible, dark/clair, police | ✅ |
 | **2 — Étude perso** | Notes, surlignages, marque-pages (locaux) | Étude individuelle complète | ✅ |
 | **3 — Quiz par livre** | Questions embarquées, déblocage après lecture, score & correction | Compréhension vérifiée par livre | ✅ (moteur) |
-| **4 — Comptes** | Supabase Auth (Apple+Google), profils | Connexion | ⬜ |
+| **4 — Comptes** | Supabase Auth (email/mot de passe ; Apple+Google plus tard), profils | Connexion | ✅ (email/mdp) |
 | **5 — Groupes** | Créer/rejoindre, membres, rôles, RLS | Dimension collective de base | ⬜ |
 | **6 — Plans + Messages** | Plan hebdo, sessions, fil de discussion | Cœur « église » | ⬜ |
 | **7 — Notifications** | Expo Push (rappels, nouveau passage, messages) | Engagement | ⬜ |

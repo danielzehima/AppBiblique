@@ -7,10 +7,15 @@ import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
 import { Spacing } from '@/constants/theme';
 import { useTheme } from '@/hooks/use-theme';
+import { useAuth } from '@/store/auth';
 
 export default function ProfilScreen() {
   const theme = useTheme();
   const router = useRouter();
+  const user = useAuth((s) => s.user);
+  const signOut = useAuth((s) => s.signOut);
+  const displayName =
+    (user?.user_metadata?.display_name as string | undefined) ?? user?.email?.split('@')[0];
 
   return (
     <ScrollView
@@ -42,15 +47,41 @@ export default function ProfilScreen() {
         COMPTE
       </ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
-        <View style={styles.accountRow}>
-          <Ionicons name="person-circle-outline" size={28} color={theme.textSecondary} />
-          <View style={{ flex: 1 }}>
-            <ThemedText>Non connecté</ThemedText>
-            <ThemedText themeColor="textSecondary" type="small">
-              Connexion (Apple / Google) — à venir
-            </ThemedText>
+        {user ? (
+          <View style={{ gap: Spacing.three }}>
+            <View style={styles.accountRow}>
+              <Ionicons name="person-circle" size={32} color={theme.tint} />
+              <View style={{ flex: 1 }}>
+                <ThemedText type="smallBold">{displayName}</ThemedText>
+                <ThemedText themeColor="textSecondary" type="small">
+                  {user.email}
+                </ThemedText>
+              </View>
+            </View>
+            <Pressable
+              onPress={signOut}
+              style={({ pressed }) => [
+                styles.signOut,
+                { borderColor: theme.border, opacity: pressed ? 0.6 : 1 },
+              ]}>
+              <Ionicons name="log-out-outline" size={18} color="#C0492F" />
+              <ThemedText style={{ color: '#C0492F' }}>Se déconnecter</ThemedText>
+            </Pressable>
           </View>
-        </View>
+        ) : (
+          <Pressable
+            onPress={() => router.push('/auth')}
+            style={({ pressed }) => [styles.accountRow, { opacity: pressed ? 0.6 : 1 }]}>
+            <Ionicons name="person-circle-outline" size={28} color={theme.textSecondary} />
+            <View style={{ flex: 1 }}>
+              <ThemedText>Se connecter</ThemedText>
+              <ThemedText themeColor="textSecondary" type="small">
+                Pour rejoindre un groupe et suivre un plan d’étude
+              </ThemedText>
+            </View>
+            <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
+          </Pressable>
+        )}
       </ThemedView>
     </ScrollView>
   );
@@ -80,5 +111,14 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
+  },
+  signOut: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.two,
+    paddingVertical: Spacing.three,
+    borderRadius: Spacing.two,
+    borderWidth: StyleSheet.hairlineWidth,
   },
 });

@@ -6,6 +6,7 @@ import { ThemedText } from '@/components/themed-text';
 import { Colors, Spacing } from '@/constants/theme';
 import { initBible } from '@/db/bible';
 import { useResolvedScheme } from '@/hooks/use-resolved-scheme';
+import { initAuth } from '@/store/auth';
 
 export default function RootLayout() {
   const scheme = useResolvedScheme();
@@ -25,6 +26,8 @@ export default function RootLayout() {
 
   const [ready, setReady] = useState(false);
   const [progress, setProgress] = useState(0);
+
+  useEffect(() => initAuth(), []);
 
   useEffect(() => {
     let active = true;
