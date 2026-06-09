@@ -1,18 +1,31 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ReadingControls } from '@/components/reading-controls';
 import { ThemedText } from '@/components/themed-text';
+import { VerseActionsSheet, type VerseActionsState } from '@/components/verse-actions-sheet';
+import { highlightColor } from '@/constants/highlights';
 import { Fonts, Spacing } from '@/constants/theme';
 import { getBook, getChapterVerses, type BookRow, type VerseRow } from '@/db/bible';
+import {
+  getChapterAnnotations,
+  saveNote,
+  setHighlight,
+  toggleBookmark,
+  type ChapterAnnotations,
+} from '@/db/study';
+import { useResolvedScheme } from '@/hooks/use-resolved-scheme';
 import { useTheme } from '@/hooks/use-theme';
 import { useFontScale, useReadingSettings } from '@/store/reading-settings';
 
+const EMPTY_ANNOTATIONS: ChapterAnnotations = { highlights: {}, notes: {}, bookmarks: new Set() };
+
 export default function ReaderScreen() {
   const theme = useTheme();
+  const scheme = useResolvedScheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
   const { book, chapter, v } = useLocalSearchParams<{
@@ -26,6 +39,8 @@ export default function ReaderScreen() {
 
   const [meta, setMeta] = useState<BookRow | null>(null);
   const [verses, setVerses] = useState<VerseRow[]>([]);
+  const [annotations, setAnnotations] = useState<ChapterAnnotations>(EMPTY_ANNOTATIONS);
+  const [sheet, setSheet] = useState<VerseActionsState | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
 
@@ -42,6 +57,46 @@ export default function ReaderScreen() {
       .then(setVerses)
       .catch((e) => console.error('getChapterVerses', e));
   }, [bookNr, chapterNr]);
+
+  const reloadAnnotations = useCallback(() => {
+    getChapterAnnotations(bookNr, chapterNr)
+      .then(setAnnotations)
+      .catch((e) => console.error('getChapterAnnotations', e));
+  }, [bookNr, chapterNr]);
+
+  useEffect(() => {
+    reloadAnnotations();
+  }, [reloadAnnotations]);
+
+  const openSheet = (verse: number) =>
+    setSheet({
+      verse,
+      reference: `${meta?.name ?? ''} ${chapterNr}:${verse}`,
+      color: annotations.highlights[verse],
+      note: annotations.notes[verse] ?? '',
+      bookmarked: annotations.bookmarks.has(verse),
+    });
+
+  const handleSetHighlight = async (color: string | null) => {
+    if (!sheet) return;
+    await setHighlight(bookNr, chapterNr, sheet.verse, color);
+    reloadAnnotations();
+    setSheet((s) => (s ? { ...s, color: color ?? undefined } : s));
+  };
+
+  const handleToggleBookmark = async () => {
+    if (!sheet) return;
+    const nv = await toggleBookmark(bookNr, chapterNr, sheet.verse);
+    reloadAnnotations();
+    setSheet((s) => (s ? { ...s, bookmarked: nv } : s));
+  };
+
+  const handleSaveNote = async (content: string) => {
+    if (!sheet) return;
+    await saveNote(bookNr, chapterNr, sheet.verse, content);
+    reloadAnnotations();
+    setSheet(null);
+  };
 
   const hasPrev = chapterNr > 1;
   const hasNext = meta ? chapterNr < meta.chapter_count : false;
@@ -75,30 +130,47 @@ export default function ReaderScreen() {
           Chapitre {chapterNr}
         </Text>
         {verses.map((vrs) => {
-          const highlighted = targetVerse === vrs.verse;
+          const userColor = highlightColor(annotations.highlights[vrs.verse], scheme);
+          const isTarget = targetVerse === vrs.verse;
+          const bg = userColor ?? (isTarget ? theme.backgroundSelected : undefined);
+          const hasNote = annotations.notes[vrs.verse] != null;
+          const bookmarked = annotations.bookmarks.has(vrs.verse);
+
           return (
-            <Text
+            <Pressable
               key={vrs.verse}
+              onPress={() => openSheet(vrs.verse)}
               onLayout={(e) => {
-                if (highlighted) {
+                if (isTarget) {
                   const y = e.nativeEvent.layout.y;
                   setTimeout(
                     () => scrollRef.current?.scrollTo({ y: Math.max(0, y - 16), animated: true }),
                     50,
                   );
                 }
-              }}
-              style={[
-                styles.verseLine,
-                { color: theme.text, fontSize: verseFontSize, lineHeight: verseLineHeight },
-                highlighted && {
-                  backgroundColor: theme.backgroundSelected,
-                  borderRadius: Spacing.two,
-                },
-              ]}>
-              <Text style={[styles.verseNum, { color: theme.tint }]}>{vrs.verse} </Text>
-              <Text style={{ fontFamily: fontFamilyValue }}>{vrs.text}</Text>
-            </Text>
+              }}>
+              <Text
+                style={[
+                  styles.verseLine,
+                  { color: theme.text, fontSize: verseFontSize, lineHeight: verseLineHeight },
+                  bg ? { backgroundColor: bg, borderRadius: Spacing.one } : null,
+                ]}>
+                <Text style={[styles.verseNum, { color: theme.tint }]}>{vrs.verse} </Text>
+                <Text style={{ fontFamily: fontFamilyValue }}>{vrs.text}</Text>
+                {hasNote ? (
+                  <Text>
+                    {'  '}
+                    <Ionicons name="document-text" size={verseFontSize * 0.7} color={theme.tint} />
+                  </Text>
+                ) : null}
+                {bookmarked ? (
+                  <Text>
+                    {' '}
+                    <Ionicons name="bookmark" size={verseFontSize * 0.7} color={theme.tint} />
+                  </Text>
+                ) : null}
+              </Text>
+            </Pressable>
           );
         })}
       </ScrollView>
@@ -106,32 +178,23 @@ export default function ReaderScreen() {
       <View
         style={[
           styles.nav,
-          { backgroundColor: theme.background, borderTopColor: theme.border, paddingBottom: insets.bottom || Spacing.three },
+          {
+            backgroundColor: theme.background,
+            borderTopColor: theme.border,
+            paddingBottom: insets.bottom || Spacing.three,
+          },
         ]}>
-        <Pressable
-          onPress={() => hasPrev && goTo(chapterNr - 1)}
-          disabled={!hasPrev}
-          style={styles.navBtn}>
-          <Ionicons
-            name="chevron-back"
-            size={22}
-            color={hasPrev ? theme.tint : theme.border}
-          />
+        <Pressable onPress={() => hasPrev && goTo(chapterNr - 1)} disabled={!hasPrev} style={styles.navBtn}>
+          <Ionicons name="chevron-back" size={22} color={hasPrev ? theme.tint : theme.border} />
           <ThemedText style={{ color: hasPrev ? theme.tint : theme.border }}>Précédent</ThemedText>
         </Pressable>
-        <Pressable
-          onPress={() => hasNext && goTo(chapterNr + 1)}
-          disabled={!hasNext}
-          style={styles.navBtn}>
+        <Pressable onPress={() => hasNext && goTo(chapterNr + 1)} disabled={!hasNext} style={styles.navBtn}>
           <ThemedText style={{ color: hasNext ? theme.tint : theme.border }}>Suivant</ThemedText>
-          <Ionicons
-            name="chevron-forward"
-            size={22}
-            color={hasNext ? theme.tint : theme.border}
-          />
+          <Ionicons name="chevron-forward" size={22} color={hasNext ? theme.tint : theme.border} />
         </Pressable>
       </View>
 
+      {/* Réglages de lecture */}
       <Modal
         visible={settingsOpen}
         transparent
@@ -156,6 +219,15 @@ export default function ReaderScreen() {
           <ReadingControls />
         </View>
       </Modal>
+
+      {/* Actions sur un verset (surligner / noter / marquer) */}
+      <VerseActionsSheet
+        state={sheet}
+        onClose={() => setSheet(null)}
+        onSetHighlight={handleSetHighlight}
+        onToggleBookmark={handleToggleBookmark}
+        onSaveNote={handleSaveNote}
+      />
     </View>
   );
 }

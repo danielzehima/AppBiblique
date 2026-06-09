@@ -52,6 +52,23 @@ export async function initBible(onProgress?: (p: number) => void): Promise<void>
   await db.execAsync(`
     PRAGMA journal_mode = WAL;
     CREATE TABLE IF NOT EXISTS meta (key TEXT PRIMARY KEY, value TEXT);
+
+    -- Annotations personnelles (persistantes, jamais effacées au ré-import du texte)
+    CREATE TABLE IF NOT EXISTS highlights (
+      book INTEGER NOT NULL, chapter INTEGER NOT NULL, verse INTEGER NOT NULL,
+      color TEXT NOT NULL,
+      PRIMARY KEY (book, chapter, verse)
+    );
+    CREATE TABLE IF NOT EXISTS notes (
+      book INTEGER NOT NULL, chapter INTEGER NOT NULL, verse INTEGER NOT NULL,
+      content TEXT NOT NULL, updated_at INTEGER NOT NULL,
+      PRIMARY KEY (book, chapter, verse)
+    );
+    CREATE TABLE IF NOT EXISTS bookmarks (
+      book INTEGER NOT NULL, chapter INTEGER NOT NULL, verse INTEGER NOT NULL,
+      created_at INTEGER NOT NULL,
+      PRIMARY KEY (book, chapter, verse)
+    );
   `);
 
   const meta = await db.getFirstAsync<{ value: string }>(
