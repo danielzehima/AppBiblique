@@ -174,7 +174,7 @@ APPLI_BIBLIQUE/
 
 | Phase | Contenu | Résultat | Statut |
 |---|---|---|---|
-| **0 — Setup** | Expo + TS + Expo Router + thème + i18n | Squelette qui tourne iOS/Android | ⬜ |
+| **0 — Setup** | Expo + TS + Expo Router + thème + navigation 4 onglets | Squelette qui tourne iOS/Android | ✅ |
 | **1 — Bible MVP** | Import Segond 1910 → SQLite, lecteur hors-ligne, réglages | Lire toute la Bible, dark/clair, police | ⬜ |
 | **2 — Étude perso** | Notes, surlignages, marque-pages (locaux) | Étude individuelle complète | ⬜ |
 | **3 — Quiz par livre** | Questions embarquées, déblocage après lecture, score & correction | Compréhension vérifiée par livre | ⬜ |
