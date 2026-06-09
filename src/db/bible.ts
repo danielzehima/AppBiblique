@@ -69,6 +69,16 @@ export async function initBible(onProgress?: (p: number) => void): Promise<void>
       created_at INTEGER NOT NULL,
       PRIMARY KEY (book, chapter, verse)
     );
+    CREATE TABLE IF NOT EXISTS reading_progress (
+      book INTEGER NOT NULL, chapter INTEGER NOT NULL,
+      read_at INTEGER NOT NULL,
+      PRIMARY KEY (book, chapter)
+    );
+    CREATE TABLE IF NOT EXISTS quiz_attempts (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      book INTEGER NOT NULL, score INTEGER NOT NULL, total INTEGER NOT NULL,
+      completed_at INTEGER NOT NULL
+    );
   `);
 
   const meta = await db.getFirstAsync<{ value: string }>(

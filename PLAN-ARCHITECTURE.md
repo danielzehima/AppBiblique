@@ -177,7 +177,7 @@ APPLI_BIBLIQUE/
 | **0 — Setup** | Expo + TS + Expo Router + thème + navigation 4 onglets | Squelette qui tourne iOS/Android | ✅ |
 | **1 — Bible MVP** | Import Segond 1910 → SQLite, lecteur hors-ligne, réglages | Lire toute la Bible, dark/clair, police | ✅ |
 | **2 — Étude perso** | Notes, surlignages, marque-pages (locaux) | Étude individuelle complète | ✅ |
-| **3 — Quiz par livre** | Questions embarquées, déblocage après lecture, score & correction | Compréhension vérifiée par livre | ⬜ |
+| **3 — Quiz par livre** | Questions embarquées, déblocage après lecture, score & correction | Compréhension vérifiée par livre | ✅ (moteur) |
 | **4 — Comptes** | Supabase Auth (Apple+Google), profils | Connexion | ⬜ |
 | **5 — Groupes** | Créer/rejoindre, membres, rôles, RLS | Dimension collective de base | ⬜ |
 | **6 — Plans + Messages** | Plan hebdo, sessions, fil de discussion | Cœur « église » | ⬜ |
@@ -209,10 +209,13 @@ APPLI_BIBLIQUE/
 1. **Origine des questions :** **pré-fournies dans l'app** — banque de questions rédigée et livrée pour chaque livre (rédaction confiée à l'assistant). Pas de création par l'animateur dans cette version.
 2. **Scores :** **strictement personnels et locaux** (`quiz_attempts`). Pas de classement de groupe, pas de table cloud.
 
-**Production des questions (à faire en Phase 3) :**
+**Production des questions :**
 - Une banque par livre (66 livres), questions à choix multiple, avec renvoi au verset.
-- Format de stockage : fichier(s) **JSON** versionné(s) dans `assets/quiz/` puis importé(s) en SQLite au premier lancement.
-- Volume cible indicatif : ~8–12 questions par livre au départ (ajustable).
+- Format de stockage : `assets/quiz/quiz.json` (clé = numéro de livre), chargé via `src/data/quiz.ts`.
+- Volume cible indicatif : ~6–12 questions par livre (ajustable).
+
+**État (Phase 3) :** moteur complet ✅ — déblocage après lecture (`reading_progress`), quiz question par question avec correction, score, « Recommencer », meilleur score local (`quiz_attempts`).
+**Livres déjà rédigés :** Genèse (1), Jonas (32), Jean (43), Apocalypse (66). Les autres livres affichent « Quiz à venir » et seront ajoutés progressivement (il suffit d'enrichir `quiz.json`).
 
 ---
 

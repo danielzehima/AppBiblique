@@ -17,6 +17,7 @@ import {
   toggleBookmark,
   type ChapterAnnotations,
 } from '@/db/study';
+import { markChapterRead } from '@/db/quiz';
 import { useResolvedScheme } from '@/hooks/use-resolved-scheme';
 import { useTheme } from '@/hooks/use-theme';
 import { useFontScale, useReadingSettings } from '@/store/reading-settings';
@@ -56,6 +57,7 @@ export default function ReaderScreen() {
     getChapterVerses(bookNr, chapterNr)
       .then(setVerses)
       .catch((e) => console.error('getChapterVerses', e));
+    markChapterRead(bookNr, chapterNr).catch((e) => console.error('markChapterRead', e));
   }, [bookNr, chapterNr]);
 
   const reloadAnnotations = useCallback(() => {

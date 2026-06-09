@@ -1,0 +1,180 @@
+{
+  "1": {
+    "questions": [
+      {
+        "q": "Au commencement, qu'est-ce que Dieu créa ?",
+        "options": ["Les cieux et la terre", "Le soleil et la lune", "Les anges", "Le jardin d'Éden"],
+        "answer": 0,
+        "ref": "1:1"
+      },
+      {
+        "q": "En combien de jours Dieu acheva-t-il son œuvre avant de se reposer ?",
+        "options": ["Six jours", "Sept jours", "Trois jours", "Quarante jours"],
+        "answer": 0,
+        "ref": "2:2"
+      },
+      {
+        "q": "Comment s'appelle le premier homme créé par Dieu ?",
+        "options": ["Adam", "Noé", "Abraham", "Caïn"],
+        "answer": 0,
+        "ref": "2:19"
+      },
+      {
+        "q": "Qui Caïn tua-t-il dans les champs ?",
+        "options": ["Abel, son frère", "Seth", "Énoch", "Lot"],
+        "answer": 0,
+        "ref": "4:8"
+      },
+      {
+        "q": "Qui Dieu sauva-t-il du déluge dans l'arche ?",
+        "options": ["Noé et sa famille", "Moïse", "Abraham", "Énoch"],
+        "answer": 0,
+        "ref": "7:1"
+      },
+      {
+        "q": "Quel signe Dieu plaça-t-il dans la nuée comme signe d'alliance ?",
+        "options": ["L'arc-en-ciel", "Une étoile", "Un agneau", "Une colonne de feu"],
+        "answer": 0,
+        "ref": "9:13"
+      },
+      {
+        "q": "Dans quelle ville Dieu confondit-il le langage des hommes ?",
+        "options": ["Babel", "Sodome", "Ur", "Béthel"],
+        "answer": 0,
+        "ref": "11:9"
+      },
+      {
+        "q": "Quel fils Abraham était-il prêt à offrir en sacrifice ?",
+        "options": ["Isaac", "Ismaël", "Jacob", "Joseph"],
+        "answer": 0,
+        "ref": "22:2"
+      }
+    ]
+  },
+  "32": {
+    "questions": [
+      {
+        "q": "Vers quelle ville Dieu envoya-t-il Jonas ?",
+        "options": ["Ninive", "Tarsis", "Jérusalem", "Babylone"],
+        "answer": 0,
+        "ref": "1:2"
+      },
+      {
+        "q": "Où Jonas tenta-t-il de fuir loin de la face de l'Éternel ?",
+        "options": ["Tarsis", "L'Égypte", "Ninive", "Sidon"],
+        "answer": 0,
+        "ref": "1:3"
+      },
+      {
+        "q": "Qu'arriva-t-il lorsque Jonas fut jeté à la mer ?",
+        "options": ["Un grand poisson l'engloutit", "Il se noya", "Un navire le recueillit", "Il marcha sur l'eau"],
+        "answer": 0,
+        "ref": "2:1"
+      },
+      {
+        "q": "Combien de temps Jonas resta-t-il dans le ventre du poisson ?",
+        "options": ["Trois jours et trois nuits", "Sept jours", "Quarante jours", "Une nuit"],
+        "answer": 0,
+        "ref": "2:1"
+      },
+      {
+        "q": "Comment réagirent les habitants de Ninive à la prédication de Jonas ?",
+        "options": ["Ils se repentirent et jeûnèrent", "Ils se moquèrent", "Ils le chassèrent", "Ils l'emprisonnèrent"],
+        "answer": 0,
+        "ref": "3:5"
+      },
+      {
+        "q": "Quelle plante Dieu fit-il pousser pour donner de l'ombre à Jonas ?",
+        "options": ["Un ricin", "Un figuier", "Une vigne", "Un cèdre"],
+        "answer": 0,
+        "ref": "4:6"
+      }
+    ]
+  },
+  "43": {
+    "questions": [
+      {
+        "q": "« Au commencement était… » quoi, selon l'évangile de Jean ?",
+        "options": ["La Parole", "La lumière", "La loi", "Le ciel"],
+        "answer": 0,
+        "ref": "1:1"
+      },
+      {
+        "q": "Quel fut le premier miracle de Jésus, à Cana en Galilée ?",
+        "options": ["Changer l'eau en vin", "Multiplier les pains", "Marcher sur l'eau", "Guérir un aveugle"],
+        "answer": 0,
+        "ref": "2:11"
+      },
+      {
+        "q": "À qui Jésus dit-il : « il faut que vous naissiez de nouveau » ?",
+        "options": ["Nicodème", "Pierre", "Lazare", "Thomas"],
+        "answer": 0,
+        "ref": "3:7"
+      },
+      {
+        "q": "« Dieu a tant aimé le monde qu'il a donné son Fils ___ »",
+        "options": ["unique", "premier-né", "bien-aimé", "saint"],
+        "answer": 0,
+        "ref": "3:16"
+      },
+      {
+        "q": "Quel homme Jésus ressuscita-t-il à Béthanie ?",
+        "options": ["Lazare", "Jaïrus", "Le fils de la veuve", "Zachée"],
+        "answer": 0,
+        "ref": "11:43"
+      },
+      {
+        "q": "« Je suis le chemin, la vérité et la ___ »",
+        "options": ["vie", "lumière", "paix", "porte"],
+        "answer": 0,
+        "ref": "14:6"
+      },
+      {
+        "q": "Quel disciple douta de la résurrection jusqu'à voir Jésus ?",
+        "options": ["Thomas", "Pierre", "Philippe", "André"],
+        "answer": 0,
+        "ref": "20:25"
+      }
+    ]
+  },
+  "66": {
+    "questions": [
+      {
+        "q": "Qui reçut la révélation alors qu'il était sur l'île de Patmos ?",
+        "options": ["Jean", "Pierre", "Paul", "Jacques"],
+        "answer": 0,
+        "ref": "1:9"
+      },
+      {
+        "q": "À combien d'Églises les lettres du début sont-elles adressées ?",
+        "options": ["Sept", "Douze", "Trois", "Dix"],
+        "answer": 0,
+        "ref": "1:11"
+      },
+      {
+        "q": "« Je suis l'alpha et… » quoi ?",
+        "options": ["l'oméga", "le bêta", "la fin seule", "le premier"],
+        "answer": 0,
+        "ref": "1:8"
+      },
+      {
+        "q": "Que tenait l'Agneau, scellé de sept sceaux ?",
+        "options": ["Un livre (rouleau)", "Une épée", "Une coupe", "Une clé"],
+        "answer": 0,
+        "ref": "5:1"
+      },
+      {
+        "q": "Comment s'appelle la cité sainte qui descend du ciel ?",
+        "options": ["La nouvelle Jérusalem", "Sion", "Babylone", "Éden"],
+        "answer": 0,
+        "ref": "21:2"
+      },
+      {
+        "q": "À la fin, Dieu fait « un nouveau ciel et une nouvelle ___ »",
+        "options": ["terre", "mer", "ville", "alliance"],
+        "answer": 0,
+        "ref": "21:1"
+      }
+    ]
+  }
+}
