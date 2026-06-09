@@ -1,62 +1,42 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { Ionicons } from '@expo/vector-icons';
+import { Pressable, StyleSheet, View } from 'react-native';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+import { Fonts, Spacing } from '@/constants/theme';
+import { useTheme } from '@/hooks/use-theme';
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
-  return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
-  );
-}
+export default function ReadScreen() {
+  const theme = useTheme();
 
-export default function HomeScreen() {
   return (
     <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
-
-        <ThemedText type="code" style={styles.code}>
-          get started
+      <View style={styles.hero}>
+        <View style={[styles.iconCircle, { backgroundColor: theme.tint }]}>
+          <Ionicons name="book" size={36} color="#FFFFFF" />
+        </View>
+        <ThemedText type="title" style={[styles.appName, { fontFamily: Fonts?.serif }]}>
+          Demeure
         </ThemedText>
+        <ThemedText themeColor="textSecondary" style={styles.tagline}>
+          Étude biblique de la Genèse à l’Apocalypse
+        </ThemedText>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <Pressable
+        style={[styles.cta, { backgroundColor: theme.tint }]}
+        accessibilityRole="button">
+        <Ionicons name="play" size={18} color="#FFFFFF" />
+        <ThemedText style={styles.ctaText}>Commencer la lecture</ThemedText>
+      </Pressable>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <ThemedText type="smallBold">Bientôt disponible ici</ThemedText>
+        <ThemedText themeColor="textSecondary" type="small">
+          • Sélection du livre et du chapitre{'\n'}• Versions au choix (Segond 1910…){'\n'}•
+          Réglages de lecture (thème, taille, police){'\n'}• Notes et surlignages
+        </ThemedText>
+      </ThemedView>
     </ThemedView>
   );
 }
@@ -64,35 +44,45 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
     paddingHorizontal: Spacing.four,
-    alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    justifyContent: 'center',
+    gap: Spacing.five,
   },
-  heroSection: {
+  hero: {
+    alignItems: 'center',
+    gap: Spacing.two,
+  },
+  iconCircle: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     alignItems: 'center',
     justifyContent: 'center',
-    flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    marginBottom: Spacing.two,
   },
-  title: {
+  appName: {
     textAlign: 'center',
   },
-  code: {
-    textTransform: 'uppercase',
+  tagline: {
+    textAlign: 'center',
+    fontStyle: 'italic',
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
+  cta: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.two,
+    paddingVertical: Spacing.three,
+    borderRadius: Spacing.three,
+  },
+  ctaText: {
+    color: '#FFFFFF',
+    fontWeight: '700',
+    fontSize: 16,
+  },
+  card: {
+    gap: Spacing.two,
+    padding: Spacing.four,
     borderRadius: Spacing.four,
   },
 });
