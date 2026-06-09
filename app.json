@@ -8,9 +8,11 @@
     "scheme": "demeure",
     "userInterfaceStyle": "automatic",
     "ios": {
-      "icon": "./assets/expo.icon"
+      "icon": "./assets/expo.icon",
+      "bundleIdentifier": "com.demeure.app"
     },
     "android": {
+      "package": "com.demeure.app",
       "adaptiveIcon": {
         "backgroundColor": "#F5EFE6",
         "foregroundImage": "./assets/images/android-icon-foreground.png",
