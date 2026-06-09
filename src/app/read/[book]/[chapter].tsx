@@ -67,14 +67,17 @@ export default function ReaderScreen() {
         <Text style={[styles.chapterTitle, { color: theme.tint, fontFamily: Fonts?.serif }]}>
           Chapitre {chapterNr}
         </Text>
-        <Text style={{ color: theme.text }}>
-          {verses.map((v) => (
-            <Text key={v.verse} style={{ fontSize: verseFontSize, lineHeight: verseLineHeight }}>
-              <Text style={[styles.verseNum, { color: theme.tint }]}>{v.verse} </Text>
-              <Text style={{ fontFamily: fontFamilyValue }}>{v.text} </Text>
-            </Text>
-          ))}
-        </Text>
+        {verses.map((v) => (
+          <Text
+            key={v.verse}
+            style={[
+              styles.verseLine,
+              { color: theme.text, fontSize: verseFontSize, lineHeight: verseLineHeight },
+            ]}>
+            <Text style={[styles.verseNum, { color: theme.tint }]}>{v.verse} </Text>
+            <Text style={{ fontFamily: fontFamilyValue }}>{v.text}</Text>
+          </Text>
+        ))}
       </ScrollView>
 
       <View
@@ -139,6 +142,9 @@ const styles = StyleSheet.create({
   chapterTitle: {
     fontSize: 24,
     fontWeight: '600',
+    marginBottom: Spacing.three,
+  },
+  verseLine: {
     marginBottom: Spacing.three,
   },
   verseNum: {
