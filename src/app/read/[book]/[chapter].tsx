@@ -1,6 +1,6 @@
 import { Ionicons } from '@expo/vector-icons';
 import { Stack, useLocalSearchParams, useRouter } from 'expo-router';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Modal, Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
@@ -15,13 +15,19 @@ export default function ReaderScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const { book, chapter } = useLocalSearchParams<{ book: string; chapter: string }>();
+  const { book, chapter, v } = useLocalSearchParams<{
+    book: string;
+    chapter: string;
+    v?: string;
+  }>();
   const bookNr = Number(book);
   const chapterNr = Number(chapter);
+  const targetVerse = v ? Number(v) : undefined;
 
   const [meta, setMeta] = useState<BookRow | null>(null);
   const [verses, setVerses] = useState<VerseRow[]>([]);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const scrollRef = useRef<ScrollView>(null);
 
   const fontScale = useFontScale();
   const fontFamily = useReadingSettings((s) => s.fontFamily);
@@ -59,6 +65,7 @@ export default function ReaderScreen() {
       />
 
       <ScrollView
+        ref={scrollRef}
         contentContainerStyle={{
           paddingHorizontal: Spacing.four,
           paddingTop: Spacing.three,
@@ -67,17 +74,33 @@ export default function ReaderScreen() {
         <Text style={[styles.chapterTitle, { color: theme.tint, fontFamily: Fonts?.serif }]}>
           Chapitre {chapterNr}
         </Text>
-        {verses.map((v) => (
-          <Text
-            key={v.verse}
-            style={[
-              styles.verseLine,
-              { color: theme.text, fontSize: verseFontSize, lineHeight: verseLineHeight },
-            ]}>
-            <Text style={[styles.verseNum, { color: theme.tint }]}>{v.verse} </Text>
-            <Text style={{ fontFamily: fontFamilyValue }}>{v.text}</Text>
-          </Text>
-        ))}
+        {verses.map((vrs) => {
+          const highlighted = targetVerse === vrs.verse;
+          return (
+            <Text
+              key={vrs.verse}
+              onLayout={(e) => {
+                if (highlighted) {
+                  const y = e.nativeEvent.layout.y;
+                  setTimeout(
+                    () => scrollRef.current?.scrollTo({ y: Math.max(0, y - 16), animated: true }),
+                    50,
+                  );
+                }
+              }}
+              style={[
+                styles.verseLine,
+                { color: theme.text, fontSize: verseFontSize, lineHeight: verseLineHeight },
+                highlighted && {
+                  backgroundColor: theme.backgroundSelected,
+                  borderRadius: Spacing.two,
+                },
+              ]}>
+              <Text style={[styles.verseNum, { color: theme.tint }]}>{vrs.verse} </Text>
+              <Text style={{ fontFamily: fontFamilyValue }}>{vrs.text}</Text>
+            </Text>
+          );
+        })}
       </ScrollView>
 
       <View

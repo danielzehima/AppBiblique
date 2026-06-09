@@ -39,18 +39,34 @@ export default function ReadScreen() {
       sections={sections}
       keyExtractor={(item) => String(item.nr)}
       ListHeaderComponent={
-        <View style={styles.header}>
-          <View style={[styles.logo, { backgroundColor: theme.tint }]}>
-            <Ionicons name="book" size={22} color="#FFFFFF" />
+        <View>
+          <View style={styles.header}>
+            <View style={[styles.logo, { backgroundColor: theme.tint }]}>
+              <Ionicons name="book" size={22} color="#FFFFFF" />
+            </View>
+            <View style={{ flex: 1 }}>
+              <ThemedText type="subtitle" style={{ fontFamily: Fonts?.serif }}>
+                Demeure
+              </ThemedText>
+              <ThemedText themeColor="textSecondary" type="small">
+                Genèse à l’Apocalypse
+              </ThemedText>
+            </View>
           </View>
-          <View style={{ flex: 1 }}>
-            <ThemedText type="subtitle" style={{ fontFamily: Fonts?.serif }}>
-              Demeure
-            </ThemedText>
-            <ThemedText themeColor="textSecondary" type="small">
-              Genèse à l’Apocalypse
-            </ThemedText>
-          </View>
+
+          <Pressable
+            onPress={() => router.push('/search')}
+            style={({ pressed }) => [
+              styles.searchBar,
+              {
+                backgroundColor: theme.backgroundElement,
+                borderColor: theme.border,
+                opacity: pressed ? 0.7 : 1,
+              },
+            ]}>
+            <Ionicons name="search" size={18} color={theme.textSecondary} />
+            <ThemedText themeColor="textSecondary">Rechercher un mot ou une référence</ThemedText>
+          </Pressable>
         </View>
       }
       renderSectionHeader={({ section }) => (
@@ -83,7 +99,16 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: Spacing.three,
-    marginBottom: Spacing.four,
+    marginBottom: Spacing.three,
+  },
+  searchBar: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: Spacing.two,
+    paddingHorizontal: Spacing.three,
+    height: 44,
+    borderRadius: Spacing.two,
+    borderWidth: StyleSheet.hairlineWidth,
   },
   logo: {
     width: 44,
