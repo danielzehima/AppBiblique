@@ -179,8 +179,8 @@ APPLI_BIBLIQUE/
 | **2 — Étude perso** | Notes, surlignages, marque-pages (locaux) | Étude individuelle complète | ✅ |
 | **3 — Quiz par livre** | Questions embarquées, déblocage après lecture, score & correction | Compréhension vérifiée par livre | ✅ (moteur) |
 | **4 — Comptes** | Supabase Auth (email/mot de passe ; Apple+Google plus tard), profils | Connexion | ✅ (email/mdp) |
-| **5 — Groupes** | Créer/rejoindre, membres, rôles, RLS | Dimension collective de base | ⬜ |
-| **6 — Plans + Messages** | Plan hebdo, sessions, fil de discussion | Cœur « église » | ⬜ |
+| **5 — Groupes** | Créer/rejoindre (code), membres, rôles, RLS | Dimension collective de base | ✅ |
+| **6 — Plans + Messages** | Plan hebdo, sessions, fil de discussion | Cœur « église » | ✅ plans · ⬜ messages |
 | **7 — Notifications** | Expo Push (rappels, nouveau passage, messages) | Engagement | ⬜ |
 | **8 — Polish + stores** | i18n complet, accessibilité, publication App Store / Play | Lancement | ⬜ |
 
