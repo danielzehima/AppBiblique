@@ -8,6 +8,10 @@
     "icon": "./assets/images/icon.png",
     "scheme": "demeure",
     "userInterfaceStyle": "automatic",
+    "runtimeVersion": { "policy": "appVersion" },
+    "updates": {
+      "url": "https://u.expo.dev/605adf39-5fd2-465a-ac31-c699bd497654"
+    },
     "ios": {
       "icon": "./assets/expo.icon",
       "bundleIdentifier": "com.demeure.app"

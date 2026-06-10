@@ -3,7 +3,9 @@ import { Stack, useFocusEffect, useLocalSearchParams, useRouter } from 'expo-rou
 import { useCallback, useEffect, useState } from 'react';
 import {
   ActivityIndicator,
+  KeyboardAvoidingView,
   Modal,
+  Platform,
   Pressable,
   ScrollView,
   Share,
@@ -289,46 +291,55 @@ function SessionModal({
 
   return (
     <Modal visible transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} />
-      <View style={[styles.sheet, { backgroundColor: theme.background, borderColor: theme.border }]}>
-        <ThemedText type="smallBold">{isEdit ? 'Modifier le passage' : 'Ajouter un passage'}</ThemedText>
-        <TextInput value={title} onChangeText={setTitle} placeholder="Titre (ex. Étude de la semaine)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
-        <Pressable onPress={() => setPickerOpen(true)} style={[inputStyle, styles.pickerBtn]}>
-          <ThemedText style={{ color: book ? theme.text : theme.textSecondary }}>
-            {book ? book.name : 'Choisir un livre'}
-          </ThemedText>
-          <Ionicons name="chevron-down" size={18} color={theme.textSecondary} />
-        </Pressable>
-        <View style={{ flexDirection: 'row', gap: Spacing.two }}>
-          <TextInput value={chapter} onChangeText={setChapter} placeholder="Chapitre" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
-          <TextInput value={vStart} onChangeText={setVStart} placeholder="V. début" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
-          <TextInput value={vEnd} onChangeText={setVEnd} placeholder="V. fin" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
-        </View>
-        <TextInput value={note} onChangeText={setNote} placeholder="Note pour le groupe (optionnel)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
-        <Pressable onPress={() => setCalOpen(true)} style={[inputStyle, styles.pickerBtn]}>
-          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
-            <Ionicons name="calendar-outline" size={18} color={theme.tint} />
-            <ThemedText style={{ color: date ? theme.text : theme.textSecondary }}>
-              {date ? formatDate(date) : 'Choisir une date'}
-            </ThemedText>
-          </View>
-          {date && (
-            <Pressable onPress={() => setDate(null)} hitSlop={8}>
-              <Ionicons name="close-circle" size={18} color={theme.textSecondary} />
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.kav}>
+        <Pressable style={styles.backdrop} onPress={onClose} />
+        <View style={[styles.sheet, { backgroundColor: theme.background, borderColor: theme.border }]}>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.sheetContent}>
+            <ThemedText type="smallBold">{isEdit ? 'Modifier le passage' : 'Ajouter un passage'}</ThemedText>
+            <TextInput value={title} onChangeText={setTitle} placeholder="Titre (ex. Étude de la semaine)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
+            <Pressable onPress={() => setPickerOpen(true)} style={[inputStyle, styles.pickerBtn]}>
+              <ThemedText style={{ color: book ? theme.text : theme.textSecondary }}>
+                {book ? book.name : 'Choisir un livre'}
+              </ThemedText>
+              <Ionicons name="chevron-down" size={18} color={theme.textSecondary} />
             </Pressable>
-          )}
-        </Pressable>
-        {error && <ThemedText type="small" style={{ color: '#C0492F' }}>{error}</ThemedText>}
-        <Pressable onPress={submit} disabled={busy} style={[styles.primary, { backgroundColor: theme.tint, opacity: busy ? 0.7 : 1 }]}>
-          {busy ? <ActivityIndicator color="#FFFFFF" /> : <ThemedText style={styles.primaryText}>{isEdit ? 'Enregistrer' : 'Publier'}</ThemedText>}
-        </Pressable>
-        {isEdit && (
-          <Pressable onPress={remove} disabled={busy} style={styles.deleteBtn}>
-            <Ionicons name="trash-outline" size={18} color="#C0492F" />
-            <ThemedText style={{ color: '#C0492F' }}>Supprimer ce passage</ThemedText>
-          </Pressable>
-        )}
-      </View>
+            <View style={{ flexDirection: 'row', gap: Spacing.two }}>
+              <TextInput value={chapter} onChangeText={setChapter} placeholder="Chapitre" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
+              <TextInput value={vStart} onChangeText={setVStart} placeholder="V. début" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
+              <TextInput value={vEnd} onChangeText={setVEnd} placeholder="V. fin" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
+            </View>
+            <TextInput value={note} onChangeText={setNote} placeholder="Note pour le groupe (optionnel)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
+            <Pressable onPress={() => setCalOpen(true)} style={[inputStyle, styles.pickerBtn]}>
+              <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+                <Ionicons name="calendar-outline" size={18} color={theme.tint} />
+                <ThemedText style={{ color: date ? theme.text : theme.textSecondary }}>
+                  {date ? formatDate(date) : 'Choisir une date'}
+                </ThemedText>
+              </View>
+              {date && (
+                <Pressable onPress={() => setDate(null)} hitSlop={8}>
+                  <Ionicons name="close-circle" size={18} color={theme.textSecondary} />
+                </Pressable>
+              )}
+            </Pressable>
+            {error && <ThemedText type="small" style={{ color: '#C0492F' }}>{error}</ThemedText>}
+            <Pressable onPress={submit} disabled={busy} style={[styles.primary, { backgroundColor: theme.tint, opacity: busy ? 0.7 : 1 }]}>
+              {busy ? <ActivityIndicator color="#FFFFFF" /> : <ThemedText style={styles.primaryText}>{isEdit ? 'Enregistrer' : 'Publier'}</ThemedText>}
+            </Pressable>
+            {isEdit && (
+              <Pressable onPress={remove} disabled={busy} style={styles.deleteBtn}>
+                <Ionicons name="trash-outline" size={18} color="#C0492F" />
+                <ThemedText style={{ color: '#C0492F' }}>Supprimer ce passage</ThemedText>
+              </Pressable>
+            )}
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
 
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>
         <Pressable style={styles.backdrop} onPress={() => setPickerOpen(false)} />
@@ -381,7 +392,9 @@ const styles = StyleSheet.create({
   badgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
   leaveBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.two, paddingVertical: Spacing.three, borderRadius: Spacing.two, borderWidth: StyleSheet.hairlineWidth, marginTop: Spacing.five },
   backdrop: { position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: 'rgba(0,0,0,0.4)' },
-  sheet: { position: 'absolute', bottom: 0, left: 0, right: 0, borderTopLeftRadius: Spacing.four, borderTopRightRadius: Spacing.four, borderWidth: StyleSheet.hairlineWidth, padding: Spacing.four, gap: Spacing.three },
+  kav: { flex: 1, justifyContent: 'flex-end' },
+  sheet: { maxHeight: '88%', borderTopLeftRadius: Spacing.four, borderTopRightRadius: Spacing.four, borderWidth: StyleSheet.hairlineWidth },
+  sheetContent: { padding: Spacing.four, gap: Spacing.three },
   pickerSheet: { position: 'absolute', bottom: 0, left: 0, right: 0, maxHeight: '70%', borderTopLeftRadius: Spacing.four, borderTopRightRadius: Spacing.four, borderWidth: StyleSheet.hairlineWidth, padding: Spacing.four },
   pickerBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' },
   pickerItem: { paddingVertical: Spacing.three, borderBottomWidth: StyleSheet.hairlineWidth },

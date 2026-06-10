@@ -1,6 +1,16 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useEffect, useState } from 'react';
-import { Modal, Pressable, StyleSheet, TextInput, View } from 'react-native';
+import {
+  KeyboardAvoidingView,
+  Modal,
+  Platform,
+  Pressable,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { HIGHLIGHT_COLORS } from '@/constants/highlights';
@@ -33,6 +43,7 @@ export function VerseActionsSheet({
 }: Props) {
   const theme = useTheme();
   const scheme = useResolvedScheme();
+  const insets = useSafeAreaInsets();
   const [noteText, setNoteText] = useState('');
 
   useEffect(() => {
@@ -43,93 +54,106 @@ export function VerseActionsSheet({
 
   return (
     <Modal visible={visible} transparent animationType="slide" onRequestClose={onClose}>
-      <Pressable style={styles.backdrop} onPress={onClose} />
-      <View
-        style={[
-          styles.sheet,
-          { backgroundColor: theme.background, borderColor: theme.border },
-        ]}>
-        <View style={styles.header}>
-          <ThemedText type="smallBold" themeColor="tint">
-            {state?.reference}
-          </ThemedText>
-          <Pressable onPress={onClose} hitSlop={10}>
-            <Ionicons name="close" size={22} color={theme.textSecondary} />
-          </Pressable>
-        </View>
-
-        {/* Surlignage */}
-        <ThemedText type="smallBold">Surligner</ThemedText>
-        <View style={styles.colorRow}>
-          {HIGHLIGHT_COLORS.map((c) => {
-            const active = state?.color === c.key;
-            return (
-              <Pressable
-                key={c.key}
-                onPress={() => onSetHighlight(active ? null : c.key)}
-                style={[
-                  styles.swatch,
-                  { backgroundColor: c[scheme] },
-                  active && { borderColor: theme.text, borderWidth: 2 },
-                ]}>
-                {active && <Ionicons name="checkmark" size={16} color={theme.text} />}
-              </Pressable>
-            );
-          })}
-          <Pressable
-            onPress={() => onSetHighlight(null)}
-            style={[styles.swatch, styles.clearSwatch, { borderColor: theme.border }]}>
-            <Ionicons name="close" size={16} color={theme.textSecondary} />
-          </Pressable>
-        </View>
-
-        {/* Marque-page */}
-        <Pressable
-          onPress={onToggleBookmark}
-          style={[styles.actionRow, { borderColor: theme.border }]}>
-          <Ionicons
-            name={state?.bookmarked ? 'bookmark' : 'bookmark-outline'}
-            size={20}
-            color={state?.bookmarked ? theme.tint : theme.textSecondary}
-          />
-          <ThemedText>{state?.bookmarked ? 'Retirer le marque-page' : 'Ajouter un marque-page'}</ThemedText>
-        </Pressable>
-
-        {/* Note */}
-        <ThemedText type="smallBold">Note personnelle</ThemedText>
-        <TextInput
-          value={noteText}
-          onChangeText={setNoteText}
-          placeholder="Écris ta réflexion sur ce verset…"
-          placeholderTextColor={theme.textSecondary}
-          multiline
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        style={styles.kav}>
+        <Pressable style={styles.backdrop} onPress={onClose} />
+        <View
           style={[
-            styles.noteInput,
-            { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.border },
-          ]}
-        />
-        <Pressable
-          onPress={() => onSaveNote(noteText)}
-          style={[styles.saveBtn, { backgroundColor: theme.tint }]}>
-          <ThemedText style={styles.saveText}>Enregistrer</ThemedText>
-        </Pressable>
-      </View>
+            styles.sheet,
+            { backgroundColor: theme.background, borderColor: theme.border },
+          ]}>
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={[
+              styles.sheetContent,
+              { paddingBottom: insets.bottom + Spacing.four },
+            ]}>
+            <View style={styles.header}>
+              <ThemedText type="smallBold" themeColor="tint">
+                {state?.reference}
+              </ThemedText>
+              <Pressable onPress={onClose} hitSlop={10}>
+                <Ionicons name="close" size={22} color={theme.textSecondary} />
+              </Pressable>
+            </View>
+
+            {/* Surlignage */}
+            <ThemedText type="smallBold">Surligner</ThemedText>
+            <View style={styles.colorRow}>
+              {HIGHLIGHT_COLORS.map((c) => {
+                const active = state?.color === c.key;
+                return (
+                  <Pressable
+                    key={c.key}
+                    onPress={() => onSetHighlight(active ? null : c.key)}
+                    style={[
+                      styles.swatch,
+                      { backgroundColor: c[scheme] },
+                      active && { borderColor: theme.text, borderWidth: 2 },
+                    ]}>
+                    {active && <Ionicons name="checkmark" size={16} color={theme.text} />}
+                  </Pressable>
+                );
+              })}
+              <Pressable
+                onPress={() => onSetHighlight(null)}
+                style={[styles.swatch, styles.clearSwatch, { borderColor: theme.border }]}>
+                <Ionicons name="close" size={16} color={theme.textSecondary} />
+              </Pressable>
+            </View>
+
+            {/* Marque-page */}
+            <Pressable
+              onPress={onToggleBookmark}
+              style={[styles.actionRow, { borderColor: theme.border }]}>
+              <Ionicons
+                name={state?.bookmarked ? 'bookmark' : 'bookmark-outline'}
+                size={20}
+                color={state?.bookmarked ? theme.tint : theme.textSecondary}
+              />
+              <ThemedText>
+                {state?.bookmarked ? 'Retirer le marque-page' : 'Ajouter un marque-page'}
+              </ThemedText>
+            </Pressable>
+
+            {/* Note */}
+            <ThemedText type="smallBold">Note personnelle</ThemedText>
+            <TextInput
+              value={noteText}
+              onChangeText={setNoteText}
+              placeholder="Écris ta réflexion sur ce verset…"
+              placeholderTextColor={theme.textSecondary}
+              multiline
+              style={[
+                styles.noteInput,
+                { backgroundColor: theme.backgroundElement, color: theme.text, borderColor: theme.border },
+              ]}
+            />
+            <Pressable
+              onPress={() => onSaveNote(noteText)}
+              style={[styles.saveBtn, { backgroundColor: theme.tint }]}>
+              <ThemedText style={styles.saveText}>Enregistrer</ThemedText>
+            </Pressable>
+          </ScrollView>
+        </View>
+      </KeyboardAvoidingView>
     </Modal>
   );
 }
 
 const styles = StyleSheet.create({
+  kav: { flex: 1, justifyContent: 'flex-end' },
   backdrop: { flex: 1, backgroundColor: 'rgba(0,0,0,0.4)' },
   sheet: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
+    maxHeight: '88%',
     borderTopLeftRadius: Spacing.four,
     borderTopRightRadius: Spacing.four,
     borderWidth: StyleSheet.hairlineWidth,
+  },
+  sheetContent: {
     padding: Spacing.four,
-    paddingBottom: Spacing.five,
     gap: Spacing.three,
   },
   header: {
