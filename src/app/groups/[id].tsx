@@ -12,6 +12,7 @@ import {
   View,
 } from 'react-native';
 
+import { CalendarModal, formatDate, toISODate } from '@/components/calendar-modal';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { getBooks, type BookRow } from '@/db/bible';
@@ -152,6 +153,7 @@ export default function GroupDetailScreen() {
                 <ThemedText themeColor="textSecondary" type="small">
                   {bookName(s.book)} {s.chapter}
                   {s.verse_start ? `:${s.verse_start}${s.verse_end ? `-${s.verse_end}` : ''}` : ''}
+                  {s.scheduled_date ? `  ·  ${formatDate(s.scheduled_date)}` : ''}
                   {i === 0 ? '  · cette semaine' : ''}
                 </ThemedText>
               </Pressable>
@@ -228,7 +230,12 @@ function SessionModal({
   const [vStart, setVStart] = useState(session?.verse_start ? String(session.verse_start) : '');
   const [vEnd, setVEnd] = useState(session?.verse_end ? String(session.verse_end) : '');
   const [note, setNote] = useState(session?.note ?? '');
+  const now = new Date();
+  const [date, setDate] = useState<string | null>(
+    session?.scheduled_date ?? toISODate(now.getFullYear(), now.getMonth(), now.getDate()),
+  );
   const [pickerOpen, setPickerOpen] = useState(false);
+  const [calOpen, setCalOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -247,6 +254,7 @@ function SessionModal({
         verseStart: vStart ? Number(vStart) : null,
         verseEnd: vEnd ? Number(vEnd) : null,
         note: note.trim() || null,
+        date,
       };
       if (isEdit && session) {
         await updateSession(session.id, payload);
@@ -297,6 +305,19 @@ function SessionModal({
           <TextInput value={vEnd} onChangeText={setVEnd} placeholder="V. fin" placeholderTextColor={theme.textSecondary} keyboardType="number-pad" style={[inputStyle, { flex: 1 }]} />
         </View>
         <TextInput value={note} onChangeText={setNote} placeholder="Note pour le groupe (optionnel)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
+        <Pressable onPress={() => setCalOpen(true)} style={[inputStyle, styles.pickerBtn]}>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: Spacing.two }}>
+            <Ionicons name="calendar-outline" size={18} color={theme.tint} />
+            <ThemedText style={{ color: date ? theme.text : theme.textSecondary }}>
+              {date ? formatDate(date) : 'Choisir une date'}
+            </ThemedText>
+          </View>
+          {date && (
+            <Pressable onPress={() => setDate(null)} hitSlop={8}>
+              <Ionicons name="close-circle" size={18} color={theme.textSecondary} />
+            </Pressable>
+          )}
+        </Pressable>
         {error && <ThemedText type="small" style={{ color: '#C0492F' }}>{error}</ThemedText>}
         <Pressable onPress={submit} disabled={busy} style={[styles.primary, { backgroundColor: theme.tint, opacity: busy ? 0.7 : 1 }]}>
           {busy ? <ActivityIndicator color="#FFFFFF" /> : <ThemedText style={styles.primaryText}>{isEdit ? 'Enregistrer' : 'Publier'}</ThemedText>}
@@ -328,6 +349,17 @@ function SessionModal({
           </ScrollView>
         </View>
       </Modal>
+
+      {calOpen && (
+        <CalendarModal
+          value={date}
+          onSelect={(iso) => {
+            setDate(iso);
+            setCalOpen(false);
+          }}
+          onClose={() => setCalOpen(false)}
+        />
+      )}
     </Modal>
   );
 }

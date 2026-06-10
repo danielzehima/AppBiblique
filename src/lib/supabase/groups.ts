@@ -21,6 +21,7 @@ export type GroupSession = {
   verse_start: number | null;
   verse_end: number | null;
   note: string | null;
+  scheduled_date: string | null;
   created_at: string;
 };
 
@@ -120,6 +121,7 @@ export async function createSession(input: {
   verseStart?: number | null;
   verseEnd?: number | null;
   note?: string | null;
+  date?: string | null;
 }): Promise<void> {
   const { error } = await supabase.from('group_sessions').insert({
     group_id: input.groupId,
@@ -129,6 +131,7 @@ export async function createSession(input: {
     verse_start: input.verseStart ?? null,
     verse_end: input.verseEnd ?? null,
     note: input.note ?? null,
+    scheduled_date: input.date ?? null,
   });
   if (error) throw error;
 }
@@ -142,6 +145,7 @@ export async function updateSession(
     verseStart?: number | null;
     verseEnd?: number | null;
     note?: string | null;
+    date?: string | null;
   },
 ): Promise<void> {
   const { error } = await supabase
@@ -153,6 +157,7 @@ export async function updateSession(
       verse_start: input.verseStart ?? null,
       verse_end: input.verseEnd ?? null,
       note: input.note ?? null,
+      scheduled_date: input.date ?? null,
     })
     .eq('id', id);
   if (error) throw error;

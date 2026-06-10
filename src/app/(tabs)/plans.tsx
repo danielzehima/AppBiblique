@@ -3,6 +3,7 @@ import { useFocusEffect, useRouter } from 'expo-router';
 import { useCallback, useEffect, useState } from 'react';
 import { ActivityIndicator, Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { formatDate } from '@/components/calendar-modal';
 import { ThemedText } from '@/components/themed-text';
 import { Spacing } from '@/constants/theme';
 import { getBooks, type BookRow } from '@/db/bible';
@@ -84,6 +85,7 @@ export default function PlansScreen() {
                 {bookName(s.book)} {s.chapter}
                 {s.verse_start ? `:${s.verse_start}${s.verse_end ? `-${s.verse_end}` : ''}` : ''}
                 {s.groups?.name ? `  ·  ${s.groups.name}` : ''}
+                {s.scheduled_date ? `  ·  ${formatDate(s.scheduled_date)}` : ''}
               </ThemedText>
               {s.note ? (
                 <ThemedText themeColor="textSecondary" type="small" numberOfLines={2} style={{ marginTop: 2 }}>
