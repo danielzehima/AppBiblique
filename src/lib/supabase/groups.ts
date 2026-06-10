@@ -133,6 +133,36 @@ export async function createSession(input: {
   if (error) throw error;
 }
 
+export async function updateSession(
+  id: string,
+  input: {
+    title: string;
+    book: number;
+    chapter: number;
+    verseStart?: number | null;
+    verseEnd?: number | null;
+    note?: string | null;
+  },
+): Promise<void> {
+  const { error } = await supabase
+    .from('group_sessions')
+    .update({
+      title: input.title,
+      book: input.book,
+      chapter: input.chapter,
+      verse_start: input.verseStart ?? null,
+      verse_end: input.verseEnd ?? null,
+      note: input.note ?? null,
+    })
+    .eq('id', id);
+  if (error) throw error;
+}
+
+export async function deleteSession(id: string): Promise<void> {
+  const { error } = await supabase.from('group_sessions').delete().eq('id', id);
+  if (error) throw error;
+}
+
 export function isGroupAdmin(group: Group, userId: string | undefined): boolean {
   return !!userId && group.owner_id === userId;
 }

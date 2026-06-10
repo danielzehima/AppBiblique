@@ -18,11 +18,13 @@ import { getBooks, type BookRow } from '@/db/bible';
 import { useTheme } from '@/hooks/use-theme';
 import {
   createSession,
+  deleteSession,
   getGroup,
   getGroupSessions,
   getMembers,
   isGroupAdmin,
   leaveGroup,
+  updateSession,
   type Group,
   type GroupSession,
   type MemberWithName,
@@ -39,7 +41,8 @@ export default function GroupDetailScreen() {
   const [members, setMembers] = useState<MemberWithName[]>([]);
   const [sessions, setSessions] = useState<GroupSession[]>([]);
   const [books, setBooks] = useState<BookRow[]>([]);
-  const [addOpen, setAddOpen] = useState(false);
+  // null = fermé ; 'new' = création ; objet = édition
+  const [sessionEdit, setSessionEdit] = useState<GroupSession | 'new' | null>(null);
 
   useEffect(() => {
     getBooks().then(setBooks).catch(() => {});
@@ -125,7 +128,7 @@ export default function GroupDetailScreen() {
         <View style={styles.sectionHeader}>
           <ThemedText type="smallBold" themeColor="tint">PASSAGES</ThemedText>
           {admin && (
-            <Pressable onPress={() => setAddOpen(true)} hitSlop={8} style={styles.addBtn}>
+            <Pressable onPress={() => setSessionEdit('new')} hitSlop={8} style={styles.addBtn}>
               <Ionicons name="add-circle" size={20} color={theme.tint} />
               <ThemedText themeColor="tint" type="smallBold">Ajouter</ThemedText>
             </Pressable>
@@ -137,24 +140,30 @@ export default function GroupDetailScreen() {
           </ThemedText>
         ) : (
           sessions.map((s, i) => (
-            <Pressable
+            <View
               key={s.id}
-              onPress={() => openSession(s)}
-              style={({ pressed }) => [
+              style={[
                 styles.sessionRow,
-                { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },
+                { backgroundColor: theme.backgroundElement },
                 i === 0 && { borderColor: theme.tint, borderWidth: 1 },
               ]}>
-              <View style={{ flex: 1 }}>
+              <Pressable style={styles.sessionMain} onPress={() => openSession(s)}>
                 <ThemedText type="smallBold">{s.title}</ThemedText>
                 <ThemedText themeColor="textSecondary" type="small">
                   {bookName(s.book)} {s.chapter}
                   {s.verse_start ? `:${s.verse_start}${s.verse_end ? `-${s.verse_end}` : ''}` : ''}
                   {i === 0 ? '  · cette semaine' : ''}
                 </ThemedText>
-              </View>
-              <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
-            </Pressable>
+              </Pressable>
+              {admin && (
+                <Pressable onPress={() => setSessionEdit(s)} hitSlop={8} style={styles.editBtn}>
+                  <Ionicons name="pencil" size={18} color={theme.tint} />
+                </Pressable>
+              )}
+              <Pressable onPress={() => openSession(s)} hitSlop={8}>
+                <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
+              </Pressable>
+            </View>
           ))
         )}
 
@@ -180,39 +189,45 @@ export default function GroupDetailScreen() {
         </Pressable>
       </ScrollView>
 
-      {addOpen && (
-        <AddSessionModal
+      {sessionEdit !== null && (
+        <SessionModal
           books={books}
-          onClose={() => setAddOpen(false)}
+          groupId={group.id}
+          session={sessionEdit === 'new' ? null : sessionEdit}
+          onClose={() => setSessionEdit(null)}
           onSaved={() => {
-            setAddOpen(false);
+            setSessionEdit(null);
             reload();
           }}
-          groupId={group.id}
         />
       )}
     </>
   );
 }
 
-function AddSessionModal({
+function SessionModal({
   books,
   groupId,
+  session,
   onClose,
   onSaved,
 }: {
   books: BookRow[];
   groupId: string;
+  session: GroupSession | null;
   onClose: () => void;
   onSaved: () => void;
 }) {
   const theme = useTheme();
-  const [title, setTitle] = useState('');
-  const [book, setBook] = useState<BookRow | null>(null);
-  const [chapter, setChapter] = useState('');
-  const [vStart, setVStart] = useState('');
-  const [vEnd, setVEnd] = useState('');
-  const [note, setNote] = useState('');
+  const isEdit = session !== null;
+  const [title, setTitle] = useState(session?.title ?? '');
+  const [book, setBook] = useState<BookRow | null>(
+    session ? books.find((b) => b.nr === session.book) ?? null : null,
+  );
+  const [chapter, setChapter] = useState(session ? String(session.chapter) : '');
+  const [vStart, setVStart] = useState(session?.verse_start ? String(session.verse_start) : '');
+  const [vEnd, setVEnd] = useState(session?.verse_end ? String(session.verse_end) : '');
+  const [note, setNote] = useState(session?.note ?? '');
   const [pickerOpen, setPickerOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -225,15 +240,32 @@ function AddSessionModal({
     if (!ch || ch < 1 || ch > book.chapter_count) return setError('Chapitre invalide.');
     setBusy(true);
     try {
-      await createSession({
-        groupId,
+      const payload = {
         title: title.trim(),
         book: book.nr,
         chapter: ch,
         verseStart: vStart ? Number(vStart) : null,
         verseEnd: vEnd ? Number(vEnd) : null,
         note: note.trim() || null,
-      });
+      };
+      if (isEdit && session) {
+        await updateSession(session.id, payload);
+      } else {
+        await createSession({ groupId, ...payload });
+      }
+      onSaved();
+    } catch (e: unknown) {
+      setError(e instanceof Error ? e.message : 'Erreur.');
+    } finally {
+      setBusy(false);
+    }
+  };
+
+  const remove = async () => {
+    if (!session) return;
+    setBusy(true);
+    try {
+      await deleteSession(session.id);
       onSaved();
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Erreur.');
@@ -251,7 +283,7 @@ function AddSessionModal({
     <Modal visible transparent animationType="slide" onRequestClose={onClose}>
       <Pressable style={styles.backdrop} onPress={onClose} />
       <View style={[styles.sheet, { backgroundColor: theme.background, borderColor: theme.border }]}>
-        <ThemedText type="smallBold">Ajouter un passage</ThemedText>
+        <ThemedText type="smallBold">{isEdit ? 'Modifier le passage' : 'Ajouter un passage'}</ThemedText>
         <TextInput value={title} onChangeText={setTitle} placeholder="Titre (ex. Étude de la semaine)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
         <Pressable onPress={() => setPickerOpen(true)} style={[inputStyle, styles.pickerBtn]}>
           <ThemedText style={{ color: book ? theme.text : theme.textSecondary }}>
@@ -267,8 +299,14 @@ function AddSessionModal({
         <TextInput value={note} onChangeText={setNote} placeholder="Note pour le groupe (optionnel)" placeholderTextColor={theme.textSecondary} style={inputStyle} />
         {error && <ThemedText type="small" style={{ color: '#C0492F' }}>{error}</ThemedText>}
         <Pressable onPress={submit} disabled={busy} style={[styles.primary, { backgroundColor: theme.tint, opacity: busy ? 0.7 : 1 }]}>
-          {busy ? <ActivityIndicator color="#FFFFFF" /> : <ThemedText style={styles.primaryText}>Publier</ThemedText>}
+          {busy ? <ActivityIndicator color="#FFFFFF" /> : <ThemedText style={styles.primaryText}>{isEdit ? 'Enregistrer' : 'Publier'}</ThemedText>}
         </Pressable>
+        {isEdit && (
+          <Pressable onPress={remove} disabled={busy} style={styles.deleteBtn}>
+            <Ionicons name="trash-outline" size={18} color="#C0492F" />
+            <ThemedText style={{ color: '#C0492F' }}>Supprimer ce passage</ThemedText>
+          </Pressable>
+        )}
       </View>
 
       <Modal visible={pickerOpen} transparent animationType="slide" onRequestClose={() => setPickerOpen(false)}>
@@ -302,7 +340,10 @@ const styles = StyleSheet.create({
   shareBtn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one, borderWidth: 1, borderRadius: Spacing.two, paddingHorizontal: Spacing.three, paddingVertical: Spacing.two },
   sectionHeader: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginTop: Spacing.three, marginBottom: Spacing.one },
   addBtn: { flexDirection: 'row', alignItems: 'center', gap: Spacing.one },
-  sessionRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two, padding: Spacing.three, borderRadius: Spacing.two, marginBottom: Spacing.two },
+  sessionRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, padding: Spacing.three, borderRadius: Spacing.two, marginBottom: Spacing.two },
+  sessionMain: { flex: 1 },
+  editBtn: { padding: Spacing.one },
+  deleteBtn: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', gap: Spacing.two, paddingVertical: Spacing.two },
   memberRow: { flexDirection: 'row', alignItems: 'center', gap: Spacing.three, paddingVertical: Spacing.three, borderBottomWidth: StyleSheet.hairlineWidth },
   badge: { borderRadius: Spacing.one, paddingHorizontal: Spacing.two, paddingVertical: 2 },
   badgeText: { color: '#FFFFFF', fontSize: 11, fontWeight: '700' },
