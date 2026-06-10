@@ -176,5 +176,65 @@
         "ref": "21:1"
       }
     ]
+  },
+  "2": {
+    "questions": [
+      { "q": "Du milieu de quoi Dieu appelle-t-il Moïse ?", "options": ["Un buisson ardent", "Une nuée", "Un torrent", "Un songe"], "answer": 0, "ref": "3:2" },
+      { "q": "Combien de plaies Dieu envoie-t-il sur l'Égypte ?", "options": ["Dix", "Sept", "Trois", "Douze"], "answer": 0, "ref": "11:1" },
+      { "q": "Quelle mer les Israélites traversent-ils à pied sec ?", "options": ["La mer Rouge", "Le Jourdain", "La mer Morte", "Le Nil"], "answer": 0, "ref": "14:21" },
+      { "q": "Sur quelle montagne Moïse reçoit-il la Loi ?", "options": ["Le Sinaï", "Le Carmel", "Sion", "Le Nébo"], "answer": 0, "ref": "19:20" },
+      { "q": "Combien y a-t-il de commandements ?", "options": ["Dix", "Sept", "Douze", "Cinq"], "answer": 0, "ref": "20:1" },
+      { "q": "Quel objet le peuple fabrique-t-il et adore-t-il en l'absence de Moïse ?", "options": ["Un veau d'or", "Un serpent", "Une arche", "Une idole de Baal"], "answer": 0, "ref": "32:4" }
+    ]
+  },
+  "40": {
+    "questions": [
+      { "q": "Qui vient d'Orient adorer l'enfant Jésus ?", "options": ["Les mages", "Les bergers", "Les prêtres", "Les pharisiens"], "answer": 0, "ref": "2:1" },
+      { "q": "Qui baptise Jésus dans le Jourdain ?", "options": ["Jean-Baptiste", "Pierre", "Élie", "André"], "answer": 0, "ref": "3:13" },
+      { "q": "Comment nomme-t-on l'enseignement de Jésus aux chapitres 5 à 7 ?", "options": ["Le sermon sur la montagne", "Les paraboles", "Le discours du temple", "L'apocalypse"], "answer": 0, "ref": "5:1" },
+      { "q": "« Heureux les pauvres en esprit » ouvre les…", "options": ["Béatitudes", "Commandements", "Paraboles", "Psaumes"], "answer": 0, "ref": "5:3" },
+      { "q": "Avec combien de pains Jésus nourrit-il cinq mille hommes ?", "options": ["Cinq", "Deux", "Sept", "Douze"], "answer": 0, "ref": "14:17" },
+      { "q": "Quel disciple renie Jésus trois fois ?", "options": ["Pierre", "Judas", "Thomas", "Jean"], "answer": 0, "ref": "26:75" }
+    ]
+  },
+  "41": {
+    "questions": [
+      { "q": "Qui Jésus appelle-t-il d'abord au bord de la mer de Galilée ?", "options": ["Des pêcheurs", "Des collecteurs d'impôts", "Des prêtres", "Des soldats"], "answer": 0, "ref": "1:16" },
+      { "q": "Que fait Jésus lors de la tempête sur la mer ?", "options": ["Il l'apaise", "Il s'enfuit", "Il la déclenche", "Il se cache"], "answer": 0, "ref": "4:39" },
+      { "q": "Quelle femme est guérie en touchant le vêtement de Jésus ?", "options": ["Une femme malade depuis douze ans", "Une aveugle", "Une lépreuse", "Une veuve"], "answer": 0, "ref": "5:25" },
+      { "q": "Combien de paniers de restes ramasse-t-on après les cinq mille ?", "options": ["Douze", "Sept", "Cinq", "Trois"], "answer": 0, "ref": "6:43" },
+      { "q": "Que demande l'aveugle Bartimée à Jésus ?", "options": ["Recouvrer la vue", "De l'argent", "Marcher", "Du pain"], "answer": 0, "ref": "10:51" },
+      { "q": "Quel jour les femmes trouvent-elles le tombeau vide ?", "options": ["Le premier jour de la semaine", "Le sabbat", "Le soir de la croix", "Jamais"], "answer": 0, "ref": "16:2" }
+    ]
+  },
+  "42": {
+    "questions": [
+      { "q": "Quel ange annonce à Marie la naissance de Jésus ?", "options": ["Gabriel", "Michel", "Raphaël", "Uriel"], "answer": 0, "ref": "1:26" },
+      { "q": "Dans quelle ville Jésus naît-il ?", "options": ["Bethléhem", "Nazareth", "Jérusalem", "Capernaüm"], "answer": 0, "ref": "2:4" },
+      { "q": "Qui vient voir l'enfant Jésus la nuit de sa naissance ?", "options": ["Les bergers", "Les mages", "Les pharisiens", "Les anciens"], "answer": 0, "ref": "2:15" },
+      { "q": "Quelle parabole raconte le retour d'un fils auprès de son père ?", "options": ["Le fils prodigue", "Le bon Samaritain", "Le semeur", "Les talents"], "answer": 0, "ref": "15:11" },
+      { "q": "Qui secourt l'homme blessé dans la parabole du bon Samaritain ?", "options": ["Un Samaritain", "Un prêtre", "Un lévite", "Un soldat"], "answer": 0, "ref": "10:33" },
+      { "q": "Sur quel chemin Jésus rejoint-il deux disciples après sa résurrection ?", "options": ["Le chemin d'Emmaüs", "Le chemin de Damas", "Le chemin de Jéricho", "Le chemin de Gaza"], "answer": 0, "ref": "24:13" }
+    ]
+  },
+  "44": {
+    "questions": [
+      { "q": "Quel événement marque la venue du Saint-Esprit sur les disciples ?", "options": ["La Pentecôte", "La Pâque", "L'Ascension", "Le sabbat"], "answer": 0, "ref": "2:1" },
+      { "q": "Comment s'appelle le persécuteur converti sur le chemin de Damas ?", "options": ["Saul (Paul)", "Pierre", "Étienne", "Barnabas"], "answer": 0, "ref": "9:4" },
+      { "q": "Qui est le premier martyr, lapidé pour sa foi ?", "options": ["Étienne", "Jacques", "Pierre", "Philippe"], "answer": 0, "ref": "7:59" },
+      { "q": "Quel apôtre a une vision lui disant de ne pas appeler impur ce que Dieu a purifié ?", "options": ["Pierre", "Paul", "Jean", "Philippe"], "answer": 0, "ref": "10:15" },
+      { "q": "Comment Pierre sort-il de prison au chapitre 12 ?", "options": ["Un ange le délivre", "Il s'évade seul", "On le relâche", "Il paie une rançon"], "answer": 0, "ref": "12:7" },
+      { "q": "Paul est surtout connu pour ses ___ missionnaires.", "options": ["voyages", "procès", "guerres", "songes"], "answer": 0, "ref": "13:4" }
+    ]
+  },
+  "45": {
+    "questions": [
+      { "q": "« Car tous ont péché et sont privés de la ___ de Dieu »", "options": ["gloire", "grâce", "paix", "loi"], "answer": 0, "ref": "3:23" },
+      { "q": "Selon Romains, par quoi est-on justifié ?", "options": ["La foi", "La loi", "La circoncision", "La sagesse"], "answer": 0, "ref": "5:1" },
+      { "q": "« Le salaire du péché, c'est la ___ »", "options": ["mort", "honte", "colère", "loi"], "answer": 0, "ref": "6:23" },
+      { "q": "« Il n'y a maintenant aucune ___ pour ceux qui sont en Jésus-Christ »", "options": ["condamnation", "joie", "crainte", "loi"], "answer": 0, "ref": "8:1" },
+      { "q": "De quoi rien ne peut nous séparer ?", "options": ["L'amour de Dieu", "La loi", "Le monde", "La chair"], "answer": 0, "ref": "8:39" },
+      { "q": "Paul exhorte à offrir son corps comme un ___ vivant.", "options": ["sacrifice", "temple", "serviteur", "témoin"], "answer": 0, "ref": "12:1" }
+    ]
   }
 }
