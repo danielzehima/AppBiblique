@@ -144,12 +144,28 @@ export async function initBible(onProgress?: (p: number) => void): Promise<void>
 
 let booksCache: BookRow[] | null = null;
 
+/** Liste des livres dérivée du texte embarqué (sans dépendre de SQLite). */
+function booksFromData(): BookRow[] {
+  return segond.books.map((b) => ({
+    nr: b.nr,
+    name: b.name,
+    testament: b.testament,
+    chapter_count: b.chapters.length,
+  }));
+}
+
 export async function getBooks(): Promise<BookRow[]> {
   if (booksCache) return booksCache;
-  const db = await getDb();
-  booksCache = await db.getAllAsync<BookRow>(
-    `SELECT nr, name, testament, chapter_count FROM books ORDER BY nr`,
-  );
+  try {
+    const db = await getDb();
+    const rows = await db.getAllAsync<BookRow>(
+      `SELECT nr, name, testament, chapter_count FROM books ORDER BY nr`,
+    );
+    booksCache = rows.length > 0 ? rows : booksFromData();
+  } catch (e) {
+    console.error('getBooks (fallback données embarquées)', e);
+    booksCache = booksFromData();
+  }
   return booksCache;
 }
 
