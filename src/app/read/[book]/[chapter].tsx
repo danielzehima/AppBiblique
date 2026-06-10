@@ -44,6 +44,22 @@ export default function ReaderScreen() {
   const [sheet, setSheet] = useState<VerseActionsState | null>(null);
   const [settingsOpen, setSettingsOpen] = useState(false);
   const scrollRef = useRef<ScrollView>(null);
+  const targetYRef = useRef<number | null>(null);
+
+  const scrollToTarget = () => {
+    if (targetYRef.current == null) return;
+    scrollRef.current?.scrollTo({ y: Math.max(0, targetYRef.current - 12), animated: true });
+  };
+
+  // Recale sur le verset cible une fois les versets affichés (navigation depuis
+  // la recherche ou un passage de groupe).
+  useEffect(() => {
+    targetYRef.current = null;
+    if (targetVerse == null || verses.length === 0) return;
+    const t = setTimeout(scrollToTarget, 350);
+    return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [verses, targetVerse]);
 
   const fontScale = useFontScale();
   const fontFamily = useReadingSettings((s) => s.fontFamily);
@@ -144,11 +160,8 @@ export default function ReaderScreen() {
               onPress={() => openSheet(vrs.verse)}
               onLayout={(e) => {
                 if (isTarget) {
-                  const y = e.nativeEvent.layout.y;
-                  setTimeout(
-                    () => scrollRef.current?.scrollTo({ y: Math.max(0, y - 16), animated: true }),
-                    50,
-                  );
+                  targetYRef.current = e.nativeEvent.layout.y;
+                  scrollToTarget();
                 }
               }}>
               <Text

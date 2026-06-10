@@ -13,16 +13,14 @@
       "url": "https://u.expo.dev/605adf39-5fd2-465a-ac31-c699bd497654"
     },
     "ios": {
-      "icon": "./assets/expo.icon",
+      "icon": "./assets/images/icon.png",
       "bundleIdentifier": "com.demeure.app"
     },
     "android": {
       "package": "com.demeure.app",
       "adaptiveIcon": {
-        "backgroundColor": "#F5EFE6",
-        "foregroundImage": "./assets/images/android-icon-foreground.png",
-        "backgroundImage": "./assets/images/android-icon-background.png",
-        "monochromeImage": "./assets/images/android-icon-monochrome.png"
+        "backgroundColor": "#2E1F15",
+        "foregroundImage": "./assets/images/adaptive-foreground.png"
       },
       "predictiveBackGestureEnabled": false
     },
