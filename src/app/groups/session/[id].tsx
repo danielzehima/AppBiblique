@@ -32,6 +32,7 @@ export default function SessionScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
+  const headerHeight = insets.top + (Platform.OS === 'ios' ? 44 : 56);
   const user = useAuth((s) => s.user);
   const { id } = useLocalSearchParams<{ id: string }>();
 
@@ -91,7 +92,7 @@ export default function SessionScreen() {
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1, backgroundColor: theme.background }}
-      keyboardVerticalOffset={Platform.OS === 'ios' ? 90 : 0}>
+      keyboardVerticalOffset={headerHeight}>
       <Stack.Screen options={{ title: session?.title ?? 'Discussion' }} />
 
       <ScrollView
