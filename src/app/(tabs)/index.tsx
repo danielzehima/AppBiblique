@@ -1,96 +1,145 @@
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { useEffect, useMemo, useState } from 'react';
-import { Pressable, SectionList, StyleSheet, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { ThemedText } from '@/components/themed-text';
 import { Fonts, Spacing } from '@/constants/theme';
-import { getBooks, type BookRow } from '@/db/bible';
+import { getBook, getChapterVerses } from '@/db/bible';
+import { getLastRead } from '@/db/quiz';
+import { getVerseOfDay } from '@/data/verse-of-day';
 import { useTheme } from '@/hooks/use-theme';
 
-export default function ReadScreen() {
+type Tile = {
+  icon: keyof typeof Ionicons.glyphMap;
+  label: string;
+  onPress: () => void;
+};
+
+export default function HomeScreen() {
   const theme = useTheme();
   const router = useRouter();
   const insets = useSafeAreaInsets();
-  const [books, setBooks] = useState<BookRow[]>([]);
+
+  const [votd, setVotd] = useState<{ ref: string; text: string } | null>(null);
 
   useEffect(() => {
-    getBooks().then(setBooks).catch((e) => console.error('getBooks', e));
+    const v = getVerseOfDay();
+    Promise.all([getBook(v.book), getChapterVerses(v.book, v.chapter)])
+      .then(([book, verses]) => {
+        const found = verses.find((x) => x.verse === v.verse) ?? verses[0];
+        if (found) {
+          setVotd({ ref: `${book?.name ?? ''} ${v.chapter}:${found.verse}`, text: found.text });
+        }
+      })
+      .catch((e) => console.error('votd', e));
   }, []);
 
-  const sections = useMemo(() => {
-    const at = books.filter((b) => b.testament === 'AT');
-    const nt = books.filter((b) => b.testament === 'NT');
-    return [
-      { title: 'Ancien Testament', data: at },
-      { title: 'Nouveau Testament', data: nt },
-    ].filter((s) => s.data.length > 0);
-  }, [books]);
+  const openVotd = () => {
+    const v = getVerseOfDay();
+    router.push({
+      pathname: '/read/[book]/[chapter]',
+      params: { book: v.book, chapter: v.chapter, v: v.verse },
+    });
+  };
+
+  const continueReading = async () => {
+    const last = await getLastRead().catch(() => null);
+    const target = last ?? { book: 1, chapter: 1 };
+    router.push({
+      pathname: '/read/[book]/[chapter]',
+      params: { book: target.book, chapter: target.chapter },
+    });
+  };
+
+  const tiles: Tile[] = [
+    {
+      icon: 'albums-outline',
+      label: 'Ancien Testament',
+      onPress: () => router.push({ pathname: '/books/[testament]', params: { testament: 'AT' } }),
+    },
+    {
+      icon: 'book-outline',
+      label: 'Nouveau Testament',
+      onPress: () => router.push({ pathname: '/books/[testament]', params: { testament: 'NT' } }),
+    },
+    { icon: 'play-circle-outline', label: 'Continuer la lecture', onPress: continueReading },
+    { icon: 'search-outline', label: 'Recherche', onPress: () => router.push('/search') },
+    { icon: 'calendar-outline', label: 'Plans de lecture', onPress: () => router.push('/plans') },
+    {
+      icon: 'bookmarks-outline',
+      label: 'Notes & favoris',
+      onPress: () => router.push('/annotations'),
+    },
+  ];
 
   return (
-    <SectionList
+    <ScrollView
       style={{ backgroundColor: theme.background }}
       contentContainerStyle={{
+        paddingHorizontal: Spacing.three,
         paddingTop: insets.top + Spacing.three,
         paddingBottom: insets.bottom + Spacing.six,
-        paddingHorizontal: Spacing.three,
-      }}
-      sections={sections}
-      keyExtractor={(item) => String(item.nr)}
-      ListHeaderComponent={
-        <View>
-          <View style={styles.header}>
-            <View style={[styles.logo, { backgroundColor: theme.tint }]}>
-              <Ionicons name="book" size={22} color="#FFFFFF" />
-            </View>
-            <View style={{ flex: 1 }}>
-              <ThemedText type="subtitle" style={{ fontFamily: Fonts?.serif }}>
-                Demeure
-              </ThemedText>
-              <ThemedText themeColor="textSecondary" type="small">
-                Genèse à l’Apocalypse
-              </ThemedText>
-            </View>
-          </View>
-
-          <Pressable
-            onPress={() => router.push('/search')}
-            style={({ pressed }) => [
-              styles.searchBar,
-              {
-                backgroundColor: theme.backgroundElement,
-                borderColor: theme.border,
-                opacity: pressed ? 0.7 : 1,
-              },
-            ]}>
-            <Ionicons name="search" size={18} color={theme.textSecondary} />
-            <ThemedText themeColor="textSecondary">Rechercher un mot ou une référence</ThemedText>
-          </Pressable>
+      }}>
+      {/* En-tête */}
+      <View style={styles.header}>
+        <View style={[styles.logo, { backgroundColor: theme.tint }]}>
+          <Ionicons name="book" size={20} color="#FFFFFF" />
         </View>
-      }
-      renderSectionHeader={({ section }) => (
-        <ThemedText themeColor="tint" type="smallBold" style={styles.sectionHeader}>
-          {section.title.toUpperCase()}
+        <View>
+          <ThemedText type="subtitle" style={{ fontFamily: Fonts?.serif }}>
+            Demeure
+          </ThemedText>
+          <ThemedText themeColor="textSecondary" type="small">
+            Genèse à l’Apocalypse
+          </ThemedText>
+        </View>
+      </View>
+
+      {/* Verset du jour */}
+      <Pressable
+        onPress={openVotd}
+        style={({ pressed }) => [
+          styles.votd,
+          { backgroundColor: theme.backgroundElement, borderColor: theme.tint, opacity: pressed ? 0.85 : 1 },
+        ]}>
+        <View style={styles.votdHead}>
+          <Ionicons name="sunny-outline" size={16} color={theme.tint} />
+          <ThemedText type="smallBold" themeColor="tint" style={{ letterSpacing: 1 }}>
+            VERSET DU JOUR
+          </ThemedText>
+        </View>
+        <ThemedText style={[styles.votdText, { fontFamily: Fonts?.serif }]}>
+          {votd ? `« ${votd.text.trim()} »` : '…'}
         </ThemedText>
-      )}
-      renderItem={({ item }) => (
-        <Pressable
-          onPress={() => router.push({ pathname: '/read/[book]', params: { book: item.nr } })}
-          style={({ pressed }) => [
-            styles.row,
-            { borderBottomColor: theme.border, opacity: pressed ? 0.6 : 1 },
-          ]}>
-          <ThemedText style={styles.bookName}>{item.name}</ThemedText>
-          <View style={styles.rowRight}>
-            <ThemedText themeColor="textSecondary" type="small">
-              {item.chapter_count} ch.
+        {votd && (
+          <ThemedText themeColor="textSecondary" type="small" style={styles.votdRef}>
+            {votd.ref}
+          </ThemedText>
+        )}
+      </Pressable>
+
+      {/* Tuiles */}
+      <View style={styles.grid}>
+        {tiles.map((t) => (
+          <Pressable
+            key={t.label}
+            onPress={t.onPress}
+            style={({ pressed }) => [
+              styles.tile,
+              { backgroundColor: theme.backgroundElement, borderColor: theme.border, opacity: pressed ? 0.7 : 1 },
+            ]}>
+            <View style={[styles.tileIcon, { backgroundColor: theme.tint }]}>
+              <Ionicons name={t.icon} size={26} color="#FFFFFF" />
+            </View>
+            <ThemedText type="smallBold" style={styles.tileLabel}>
+              {t.label}
             </ThemedText>
-            <Ionicons name="chevron-forward" size={18} color={theme.textSecondary} />
-          </View>
-        </Pressable>
-      )}
-    />
+          </Pressable>
+        ))}
+      </View>
+    </ScrollView>
   );
 }
 
@@ -101,40 +150,27 @@ const styles = StyleSheet.create({
     gap: Spacing.three,
     marginBottom: Spacing.three,
   },
-  searchBar: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  logo: { width: 40, height: 40, borderRadius: 20, alignItems: 'center', justifyContent: 'center' },
+  votd: {
+    borderRadius: Spacing.three,
+    borderWidth: 1,
+    padding: Spacing.four,
     gap: Spacing.two,
-    paddingHorizontal: Spacing.three,
-    height: 44,
-    borderRadius: Spacing.two,
+    marginBottom: Spacing.four,
+  },
+  votdHead: { flexDirection: 'row', alignItems: 'center', gap: Spacing.two },
+  votdText: { fontSize: 18, lineHeight: 28, fontStyle: 'italic' },
+  votdRef: { textAlign: 'right' },
+  grid: { flexDirection: 'row', flexWrap: 'wrap', gap: Spacing.three },
+  tile: {
+    width: '47%',
+    flexGrow: 1,
+    borderRadius: Spacing.three,
     borderWidth: StyleSheet.hairlineWidth,
-  },
-  logo: {
-    width: 44,
-    height: 44,
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  sectionHeader: {
-    letterSpacing: 1,
-    marginTop: Spacing.four,
-    marginBottom: Spacing.two,
-  },
-  row: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: Spacing.three,
-    borderBottomWidth: StyleSheet.hairlineWidth,
-  },
-  bookName: {
-    fontSize: 17,
-  },
-  rowRight: {
-    flexDirection: 'row',
+    paddingVertical: Spacing.four,
     alignItems: 'center',
     gap: Spacing.two,
   },
+  tileIcon: { width: 52, height: 52, borderRadius: 26, alignItems: 'center', justifyContent: 'center' },
+  tileLabel: { textAlign: 'center' },
 });

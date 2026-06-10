@@ -12,6 +12,14 @@ export async function markChapterRead(book: number, chapter: number): Promise<vo
   );
 }
 
+/** Dernier chapitre ouvert (pour « Continuer la lecture »), ou null. */
+export async function getLastRead(): Promise<{ book: number; chapter: number } | null> {
+  const db = await getDb();
+  return db.getFirstAsync<{ book: number; chapter: number }>(
+    `SELECT book, chapter FROM reading_progress ORDER BY read_at DESC LIMIT 1`,
+  );
+}
+
 /** Nombre de chapitres lus dans un livre. */
 export async function getReadCount(book: number): Promise<number> {
   const db = await getDb();
