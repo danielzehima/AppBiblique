@@ -68,10 +68,7 @@ export default function GroupDetailScreen() {
   const bookName = (nr: number) => books.find((b) => b.nr === nr)?.name ?? `Livre ${nr}`;
 
   const openSession = (s: GroupSession) =>
-    router.push({
-      pathname: '/read/[book]/[chapter]',
-      params: { book: s.book, chapter: s.chapter, ...(s.verse_start ? { v: s.verse_start } : {}) },
-    });
+    router.push({ pathname: '/groups/session/[id]', params: { id: s.id } });
 
   const share = async () => {
     if (!group) return;

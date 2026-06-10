@@ -66,12 +66,7 @@ export default function PlansScreen() {
         sessions.map((s) => (
           <Pressable
             key={s.id}
-            onPress={() =>
-              router.push({
-                pathname: '/read/[book]/[chapter]',
-                params: { book: s.book, chapter: s.chapter, ...(s.verse_start ? { v: s.verse_start } : {}) },
-              })
-            }
+            onPress={() => router.push({ pathname: '/groups/session/[id]', params: { id: s.id } })}
             style={({ pressed }) => [
               styles.card,
               { backgroundColor: theme.backgroundElement, opacity: pressed ? 0.7 : 1 },

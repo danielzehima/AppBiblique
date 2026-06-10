@@ -171,3 +171,73 @@ export async function deleteSession(id: string): Promise<void> {
 export function isGroupAdmin(group: Group, userId: string | undefined): boolean {
   return !!userId && group.owner_id === userId;
 }
+
+export async function getSession(id: string): Promise<GroupSession | null> {
+  const { data, error } = await supabase
+    .from('group_sessions')
+    .select('*')
+    .eq('id', id)
+    .maybeSingle();
+  if (error) throw error;
+  return data;
+}
+
+export type Message = {
+  id: string;
+  user_id: string;
+  content: string;
+  created_at: string;
+  display_name: string | null;
+};
+
+export async function getMessages(sessionId: string): Promise<Message[]> {
+  const { data, error } = await supabase
+    .from('messages')
+    .select('id, user_id, content, created_at')
+    .eq('session_id', sessionId)
+    .order('created_at', { ascending: true });
+  if (error) throw error;
+  const rows = data ?? [];
+  const ids = [...new Set(rows.map((r) => r.user_id))];
+  const names = new Map<string, string | null>();
+  if (ids.length > 0) {
+    const { data: profiles } = await supabase
+      .from('profiles')
+      .select('id, display_name')
+      .in('id', ids);
+    for (const p of profiles ?? []) names.set(p.id, p.display_name as string | null);
+  }
+  return rows.map((r) => ({ ...r, display_name: names.get(r.user_id) ?? null }));
+}
+
+export async function sendMessage(
+  groupId: string,
+  sessionId: string,
+  content: string,
+): Promise<void> {
+  const { data: auth } = await supabase.auth.getUser();
+  const uid = auth.user?.id;
+  if (!uid) throw new Error('Non connecté');
+  const { error } = await supabase.from('messages').insert({
+    group_id: groupId,
+    session_id: sessionId,
+    user_id: uid,
+    content: content.trim(),
+  });
+  if (error) throw error;
+}
+
+/** Abonnement temps réel aux nouveaux messages d'un passage. */
+export function subscribeMessages(sessionId: string, onChange: () => void): () => void {
+  const channel = supabase
+    .channel(`messages-${sessionId}`)
+    .on(
+      'postgres_changes',
+      { event: 'INSERT', schema: 'public', table: 'messages', filter: `session_id=eq.${sessionId}` },
+      () => onChange(),
+    )
+    .subscribe();
+  return () => {
+    supabase.removeChannel(channel);
+  };
+}
