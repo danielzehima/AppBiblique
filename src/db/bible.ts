@@ -174,12 +174,25 @@ export async function getBook(nr: number): Promise<BookRow | null> {
   return books.find((b) => b.nr === nr) ?? null;
 }
 
+/** Versets d'un chapitre depuis le texte embarqué (sans dépendre de SQLite). */
+function versesFromData(book: number, chapter: number): VerseRow[] {
+  const b = segond.books.find((x) => x.nr === book);
+  const c = b?.chapters.find((x) => x.c === chapter);
+  return c ? c.verses.map((v) => ({ verse: v.n, text: v.t })) : [];
+}
+
 export async function getChapterVerses(book: number, chapter: number): Promise<VerseRow[]> {
-  const db = await getDb();
-  return db.getAllAsync<VerseRow>(
-    `SELECT verse, text FROM verses WHERE book = ? AND chapter = ? ORDER BY verse`,
-    [book, chapter],
-  );
+  try {
+    const db = await getDb();
+    const rows = await db.getAllAsync<VerseRow>(
+      `SELECT verse, text FROM verses WHERE book = ? AND chapter = ? ORDER BY verse`,
+      [book, chapter],
+    );
+    if (rows.length > 0) return rows;
+  } catch (e) {
+    console.error('getChapterVerses (repli données embarquées)', e);
+  }
+  return versesFromData(book, chapter);
 }
 
 /** Recherche plein-texte (par mot), insensible aux accents et à la casse. */
