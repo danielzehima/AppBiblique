@@ -28,6 +28,32 @@ const VERSES: VerseRef[] = [
   { book: 60, chapter: 5, verse: 7 }, // 1 Pierre 5:7
   { book: 59, chapter: 1, verse: 5 }, // Jacques 1:5
   { book: 45, chapter: 5, verse: 8 }, // Romains 5:8
+  { book: 19, chapter: 1, verse: 1 }, // Psaumes 1:1
+  { book: 19, chapter: 91, verse: 1 }, // Psaumes 91:1
+  { book: 19, chapter: 121, verse: 1 }, // Psaumes 121:1
+  { book: 19, chapter: 139, verse: 14 }, // Psaumes 139:14
+  { book: 19, chapter: 34, verse: 8 }, // Psaumes 34:8
+  { book: 19, chapter: 103, verse: 1 }, // Psaumes 103:1
+  { book: 20, chapter: 3, verse: 6 }, // Proverbes 3:6
+  { book: 20, chapter: 18, verse: 10 }, // Proverbes 18:10
+  { book: 23, chapter: 26, verse: 3 }, // Ésaïe 26:3
+  { book: 23, chapter: 53, verse: 5 }, // Ésaïe 53:5
+  { book: 25, chapter: 3, verse: 22 }, // Lamentations 3:22
+  { book: 40, chapter: 5, verse: 16 }, // Matthieu 5:16
+  { book: 40, chapter: 28, verse: 19 }, // Matthieu 28:19
+  { book: 40, chapter: 7, verse: 7 }, // Matthieu 7:7
+  { book: 43, chapter: 1, verse: 1 }, // Jean 1:1
+  { book: 43, chapter: 10, verse: 10 }, // Jean 10:10
+  { book: 43, chapter: 15, verse: 5 }, // Jean 15:5
+  { book: 47, chapter: 5, verse: 17 }, // 2 Corinthiens 5:17
+  { book: 48, chapter: 5, verse: 22 }, // Galates 5:22
+  { book: 49, chapter: 2, verse: 8 }, // Éphésiens 2:8
+  { book: 51, chapter: 3, verse: 23 }, // Colossiens 3:23
+  { book: 52, chapter: 5, verse: 16 }, // 1 Thessaloniciens 5:16
+  { book: 58, chapter: 13, verse: 8 }, // Hébreux 13:8
+  { book: 62, chapter: 4, verse: 8 }, // 1 Jean 4:8
+  { book: 66, chapter: 3, verse: 20 }, // Apocalypse 3:20
+  { book: 5, chapter: 31, verse: 6 }, // Deutéronome 31:6
 ];
 
 /** Renvoie la référence du jour (change chaque jour). */

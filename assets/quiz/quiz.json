@@ -236,5 +236,85 @@
       { "q": "De quoi rien ne peut nous séparer ?", "options": ["L'amour de Dieu", "La loi", "Le monde", "La chair"], "answer": 0, "ref": "8:39" },
       { "q": "Paul exhorte à offrir son corps comme un ___ vivant.", "options": ["sacrifice", "temple", "serviteur", "témoin"], "answer": 0, "ref": "12:1" }
     ]
+  },
+  "6": {
+    "questions": [
+      { "q": "Qui succède à Moïse pour conduire Israël ?", "options": ["Josué", "Aaron", "Caleb", "Gédéon"], "answer": 0, "ref": "1:1" },
+      { "q": "Quel fleuve le peuple traverse-t-il à sec pour entrer dans le pays ?", "options": ["Le Jourdain", "La mer Rouge", "L'Euphrate", "Le Nil"], "answer": 0, "ref": "3:17" },
+      { "q": "Quelle femme cache les espions à Jéricho ?", "options": ["Rahab", "Déborah", "Ruth", "Anne"], "answer": 0, "ref": "2:1" },
+      { "q": "Quelle ville s'écroule après que le peuple en fait le tour ?", "options": ["Jéricho", "Aï", "Hébron", "Sichem"], "answer": 0, "ref": "6:20" },
+      { "q": "Pendant combien de jours tournent-ils autour de Jéricho ?", "options": ["Sept", "Trois", "Douze", "Quarante"], "answer": 0, "ref": "6:15" },
+      { "q": "« Moi et ma maison, nous servirons l'___ »", "options": ["Éternel", "idole", "roi", "peuple"], "answer": 0, "ref": "24:15" }
+    ]
+  },
+  "8": {
+    "questions": [
+      { "q": "De quel pays vient Ruth ?", "options": ["Moab", "L'Égypte", "Édom", "Babylone"], "answer": 0, "ref": "1:4" },
+      { "q": "Comment s'appelle la belle-mère de Ruth ?", "options": ["Naomi", "Orpa", "Anne", "Sara"], "answer": 0, "ref": "1:2" },
+      { "q": "« Ton peuple sera mon peuple, et ton Dieu sera mon ___ »", "options": ["Dieu", "roi", "refuge", "berger"], "answer": 0, "ref": "1:16" },
+      { "q": "Dans le champ de qui Ruth glane-t-elle ?", "options": ["Boaz", "Obed", "Élimélec", "Jessé"], "answer": 0, "ref": "2:3" },
+      { "q": "Qui Ruth épouse-t-elle finalement ?", "options": ["Boaz", "Obed", "Salmon", "Mahlon"], "answer": 0, "ref": "4:13" },
+      { "q": "Ruth devient l'arrière-grand-mère de quel roi ?", "options": ["David", "Salomon", "Saül", "Ézéchias"], "answer": 0, "ref": "4:17" }
+    ]
+  },
+  "9": {
+    "questions": [
+      { "q": "Qui est la mère de Samuel, qui priait au temple ?", "options": ["Anne", "Peninna", "Naomi", "Myriam"], "answer": 0, "ref": "1:20" },
+      { "q": "Enfant, que répond Samuel à l'appel de Dieu ?", "options": ["« Parle, car ton serviteur écoute »", "« Envoie un autre »", "Il s'enfuit", "Il se tait"], "answer": 0, "ref": "3:10" },
+      { "q": "Qui est le premier roi d'Israël, oint par Samuel ?", "options": ["Saül", "David", "Salomon", "Josué"], "answer": 0, "ref": "10:1" },
+      { "q": "Quel jeune berger abat le géant Goliath ?", "options": ["David", "Jonathan", "Saül", "Samuel"], "answer": 0, "ref": "17:50" },
+      { "q": "Avec quoi David abat-il Goliath ?", "options": ["Une fronde et une pierre", "Une épée", "Un arc", "Une lance"], "answer": 0, "ref": "17:50" },
+      { "q": "Quel fils de Saül devient l'ami fidèle de David ?", "options": ["Jonathan", "Abner", "Joab", "Nathan"], "answer": 0, "ref": "18:1" }
+    ]
+  },
+  "17": {
+    "questions": [
+      { "q": "De quel empire Esther devient-elle reine ?", "options": ["Perse", "Babylone", "L'Égypte", "Rome"], "answer": 0, "ref": "2:17" },
+      { "q": "Quel cousin élève Esther ?", "options": ["Mardochée", "Aman", "Boaz", "Néhémie"], "answer": 0, "ref": "2:7" },
+      { "q": "Qui complote l'extermination des Juifs ?", "options": ["Aman", "Mardochée", "Assuérus", "Daniel"], "answer": 0, "ref": "3:6" },
+      { "q": "Que décide Esther de faire malgré le danger de mort ?", "options": ["Aller vers le roi pour son peuple", "Fuir", "Se cacher", "Se taire"], "answer": 0, "ref": "4:16" },
+      { "q": "Quelle fête commémore la délivrance des Juifs ?", "options": ["Pourim", "La Pâque", "La Pentecôte", "Hanoucca"], "answer": 0, "ref": "9:26" },
+      { "q": "À quelle potence Aman est-il finalement pendu ?", "options": ["Celle qu'il avait préparée pour Mardochée", "Celle du roi", "Aucune", "Une croix"], "answer": 0, "ref": "7:10" }
+    ]
+  },
+  "27": {
+    "questions": [
+      { "q": "Dans quel empire Daniel est-il exilé ?", "options": ["Babylone", "Ninive", "Rome", "L'Égypte"], "answer": 0, "ref": "1:1" },
+      { "q": "Que Daniel sait-il interpréter pour le roi ?", "options": ["Les songes", "Les lettres", "Les lois", "Les chants"], "answer": 0, "ref": "2:28" },
+      { "q": "Comment s'appellent les trois amis de Daniel ?", "options": ["Schadrac, Méschac et Abed-Nego", "Les mages", "Anania seul", "Les sages"], "answer": 0, "ref": "3:12" },
+      { "q": "Pourquoi les trois amis sont-ils jetés dans la fournaise ?", "options": ["Refus d'adorer la statue d'or", "Vol", "Mensonge", "Trahison"], "answer": 0, "ref": "3:18" },
+      { "q": "Dans quelle fosse Daniel est-il jeté ?", "options": ["La fosse aux lions", "Une fournaise", "Un puits", "La mer"], "answer": 0, "ref": "6:17" },
+      { "q": "Que fait Dieu pour protéger Daniel dans la fosse ?", "options": ["Il ferme la gueule des lions", "Il l'endort", "Il le sort aussitôt", "Rien"], "answer": 0, "ref": "6:23" }
+    ]
+  },
+  "46": {
+    "questions": [
+      { "q": "De quoi parle surtout le célèbre chapitre 13 ?", "options": ["La charité (l'amour)", "La foi seule", "La loi", "La prière"], "answer": 0, "ref": "13:1" },
+      { "q": "« La charité est patiente, elle est pleine de ___ »", "options": ["bonté", "jalousie", "orgueil", "crainte"], "answer": 0, "ref": "13:4" },
+      { "q": "Des trois (foi, espérance, charité), quelle est la plus grande ?", "options": ["La charité", "La foi", "L'espérance", "Elles sont égales"], "answer": 0, "ref": "13:13" },
+      { "q": "À quoi Paul compare-t-il l'Église, aux membres divers mais unis ?", "options": ["Un corps", "Un temple", "Une armée", "Une famille"], "answer": 0, "ref": "12:12" },
+      { "q": "Sans la charité, Paul dit n'être qu'un « ___ qui résonne ».", "options": ["airain", "roseau", "torrent", "écho"], "answer": 0, "ref": "13:1" },
+      { "q": "Quel repas du Seigneur Paul rappelle-t-il au chapitre 11 ?", "options": ["La sainte cène", "La Pâque", "La dîme", "L'offrande"], "answer": 0, "ref": "11:23" }
+    ]
+  },
+  "50": {
+    "questions": [
+      { "q": "« Je puis tout par celui qui me ___ »", "options": ["fortifie", "aime", "juge", "appelle"], "answer": 0, "ref": "4:13" },
+      { "q": "« Réjouissez-vous toujours dans le ___ »", "options": ["Seigneur", "monde", "travail", "temple"], "answer": 0, "ref": "4:4" },
+      { "q": "Dans quelle situation Paul écrit-il cette lettre ?", "options": ["En prison", "En voyage", "Au temple", "En exil libre"], "answer": 0, "ref": "1:13" },
+      { "q": "Selon Philippiens 1:21, « la mort m'est un ___ »", "options": ["gain", "repos", "honneur", "devoir"], "answer": 0, "ref": "1:21" },
+      { "q": "Jésus s'est abaissé en prenant la condition de…", "options": ["serviteur", "roi", "ange", "prophète"], "answer": 0, "ref": "2:7" },
+      { "q": "« La paix de Dieu, qui surpasse toute ___ »", "options": ["intelligence", "richesse", "loi", "crainte"], "answer": 0, "ref": "4:7" }
+    ]
+  },
+  "59": {
+    "questions": [
+      { "q": "« La foi sans les ___ est morte »", "options": ["œuvres", "prières", "lois", "paroles"], "answer": 0, "ref": "2:26" },
+      { "q": "Que doit faire celui qui manque de sagesse ?", "options": ["La demander à Dieu", "Lire des livres", "Demander aux anciens", "Se taire"], "answer": 0, "ref": "1:5" },
+      { "q": "« Que tout homme soit prompt à écouter, lent à ___ »", "options": ["parler", "agir", "marcher", "donner"], "answer": 0, "ref": "1:19" },
+      { "q": "À quoi Jacques compare-t-il la langue, ce petit membre ?", "options": ["Un feu", "Une épée", "Une source pure", "Une lumière"], "answer": 0, "ref": "3:6" },
+      { "q": "Que recommande Jacques pour le malade ?", "options": ["Prier pour lui et l'oindre d'huile", "Le cacher", "Ne rien faire", "Le punir"], "answer": 0, "ref": "5:14" },
+      { "q": "« Approchez-vous de Dieu, et il s'___ de vous »", "options": ["approchera", "éloignera", "cachera", "souviendra"], "answer": 0, "ref": "4:8" }
+    ]
   }
 }
