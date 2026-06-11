@@ -4,6 +4,10 @@
 import * as Notifications from 'expo-notifications';
 import { Platform } from 'react-native';
 
+// Nouveau canal (un canal Android est immuable une fois créé : changer de
+// réglages = nouveau canal). Son activé + importance haute.
+const CHANNEL_ID = 'reading-reminders';
+
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
     shouldShowAlert: true,
@@ -24,9 +28,12 @@ export async function ensureNotificationPermission(): Promise<boolean> {
 
 async function ensureChannel(): Promise<void> {
   if (Platform.OS === 'android') {
-    await Notifications.setNotificationChannelAsync('daily-reading', {
+    await Notifications.setNotificationChannelAsync(CHANNEL_ID, {
       name: 'Rappels de lecture',
-      importance: Notifications.AndroidImportance.DEFAULT,
+      importance: Notifications.AndroidImportance.HIGH,
+      sound: 'default',
+      vibrationPattern: [0, 250, 250, 250],
+      enableVibrate: true,
     });
   }
 }
@@ -39,11 +46,13 @@ export async function scheduleDailyReminder(hour: number, minute: number): Promi
     content: {
       title: 'Demeure',
       body: 'C’est le moment de ta lecture du jour 🕊️',
+      sound: 'default',
     },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.DAILY,
       hour,
       minute,
+      channelId: CHANNEL_ID,
     },
   });
 }
@@ -56,11 +65,15 @@ export async function cancelDailyReminder(): Promise<void> {
 export async function sendTestNotification(): Promise<void> {
   await ensureChannel();
   await Notifications.scheduleNotificationAsync({
-    content: { title: 'Demeure', body: 'Notification de test ✅ — tout fonctionne !' },
+    content: {
+      title: 'Demeure',
+      body: 'Notification de test ✅ — tout fonctionne !',
+      sound: 'default',
+    },
     trigger: {
       type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
       seconds: 10,
-      channelId: 'daily-reading',
+      channelId: CHANNEL_ID,
     },
   });
 }
