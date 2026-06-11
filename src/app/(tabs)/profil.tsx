@@ -2,6 +2,7 @@ import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
 import { Pressable, ScrollView, StyleSheet, View } from 'react-native';
 
+import { NotificationControls } from '@/components/notification-controls';
 import { ReadingControls } from '@/components/reading-controls';
 import { ThemedText } from '@/components/themed-text';
 import { ThemedView } from '@/components/themed-view';
@@ -41,6 +42,13 @@ export default function ProfilScreen() {
       </ThemedText>
       <ThemedView type="backgroundElement" style={styles.card}>
         <ReadingControls />
+      </ThemedView>
+
+      <ThemedText type="smallBold" themeColor="tint" style={styles.section}>
+        NOTIFICATIONS
+      </ThemedText>
+      <ThemedView type="backgroundElement" style={styles.card}>
+        <NotificationControls />
       </ThemedView>
 
       <ThemedText type="smallBold" themeColor="tint" style={styles.section}>
