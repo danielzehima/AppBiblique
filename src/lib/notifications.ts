@@ -51,3 +51,16 @@ export async function scheduleDailyReminder(hour: number, minute: number): Promi
 export async function cancelDailyReminder(): Promise<void> {
   await Notifications.cancelAllScheduledNotificationsAsync();
 }
+
+/** Notification de test, déclenchée ~10 s plus tard (diagnostic). */
+export async function sendTestNotification(): Promise<void> {
+  await ensureChannel();
+  await Notifications.scheduleNotificationAsync({
+    content: { title: 'Demeure', body: 'Notification de test ✅ — tout fonctionne !' },
+    trigger: {
+      type: Notifications.SchedulableTriggerInputTypes.TIME_INTERVAL,
+      seconds: 10,
+      channelId: 'daily-reading',
+    },
+  });
+}

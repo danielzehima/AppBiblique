@@ -8,6 +8,7 @@ import {
   cancelDailyReminder,
   ensureNotificationPermission,
   scheduleDailyReminder,
+  sendTestNotification,
 } from '@/lib/notifications';
 import { useNotifSettings } from '@/store/notifications';
 
@@ -46,6 +47,16 @@ export function NotificationControls() {
     if (enabled) scheduleDailyReminder(hour, m).catch(() => {});
   };
 
+  const test = async () => {
+    const ok = await ensureNotificationPermission();
+    if (!ok) {
+      Alert.alert('Notifications désactivées', 'Autorise les notifications pour Demeure.');
+      return;
+    }
+    await sendTestNotification();
+    Alert.alert('Test envoyé', 'Ferme l’app : une notification doit arriver dans ~10 secondes.');
+  };
+
   return (
     <View style={{ gap: Spacing.three }}>
       <View style={styles.row}>
@@ -75,6 +86,11 @@ export function NotificationControls() {
           </View>
         </View>
       )}
+
+      <Pressable onPress={test} style={[styles.testBtn, { borderColor: theme.tint }]}>
+        <Ionicons name="notifications-outline" size={16} color={theme.tint} />
+        <ThemedText themeColor="tint" type="smallBold">Tester (dans 10 s)</ThemedText>
+      </Pressable>
     </View>
   );
 }
@@ -123,4 +139,13 @@ const styles = StyleSheet.create({
   },
   timeValue: { fontSize: 28, fontWeight: '600', minWidth: 44, textAlign: 'center' },
   colon: { fontSize: 28, fontWeight: '600' },
+  testBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: Spacing.two,
+    paddingVertical: Spacing.two,
+    borderRadius: Spacing.two,
+    borderWidth: StyleSheet.hairlineWidth,
+  },
 });
